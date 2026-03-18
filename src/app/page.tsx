@@ -1,3 +1,5 @@
+import ThemeToggle from "./components/theme-toggle";
+
 export default function Home() {
   return (
     <>
@@ -16,7 +18,7 @@ export default function Home() {
 /* ─── Navigation ─── */
 function Nav() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#" className="text-xl font-bold gradient-text tracking-tight">
           patersclat
@@ -34,12 +36,16 @@ function Nav() {
           <a href="#pricing" className="hover:text-foreground transition-colors">
             Pricing
           </a>
+          <ThemeToggle />
           <a
             href="#contact"
             className="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-full text-sm font-medium transition-colors"
           >
             Get in Touch
           </a>
+        </div>
+        <div className="md:hidden">
+          <ThemeToggle />
         </div>
       </div>
     </nav>
@@ -56,14 +62,7 @@ function Hero() {
       <div className="hero-glow bg-pink-600 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] animate-pulse-glow" />
 
       {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+      <div className="absolute inset-0 opacity-[0.03] grid-overlay" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div className="animate-fade-in-up">
@@ -94,7 +93,7 @@ function Hero() {
           </a>
           <a
             href="#services"
-            className="px-8 py-4 border border-white/10 hover:border-white/20 text-foreground rounded-full font-medium transition-all hover:bg-white/5"
+            className="px-8 py-4 border border-border hover:border-muted text-foreground rounded-full font-medium transition-all hover:bg-surface"
           >
             See Our Services
           </a>
@@ -409,7 +408,7 @@ function Pricing() {
                 className={`mt-8 block text-center py-3 rounded-full font-medium transition-all ${
                   plan.highlighted
                     ? "bg-accent hover:bg-accent-dark text-white hover:shadow-[0_0_30px_rgba(99,102,241,0.3)]"
-                    : "border border-white/10 hover:border-white/20 hover:bg-white/5"
+                    : "border border-border hover:border-muted hover:bg-surface-light"
                 }`}
               >
                 Get Started
@@ -454,28 +453,28 @@ function Contact() {
               name="name"
               placeholder="Your name"
               required
-              className="w-full px-5 py-4 rounded-xl bg-surface border border-white/10 focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
+              className="w-full px-5 py-4 rounded-xl bg-surface border border-border focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
             />
             <input
               type="email"
               name="email"
               placeholder="Email address"
               required
-              className="w-full px-5 py-4 rounded-xl bg-surface border border-white/10 focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
+              className="w-full px-5 py-4 rounded-xl bg-surface border border-border focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
             />
           </div>
           <input
             type="text"
             name="business"
             placeholder="Business name"
-            className="w-full px-5 py-4 rounded-xl bg-surface border border-white/10 focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
+            className="w-full px-5 py-4 rounded-xl bg-surface border border-border focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted"
           />
           <textarea
             name="message"
             rows={5}
             placeholder="Tell us about your project..."
             required
-            className="w-full px-5 py-4 rounded-xl bg-surface border border-white/10 focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted resize-none"
+            className="w-full px-5 py-4 rounded-xl bg-surface border border-border focus:border-accent/50 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-colors placeholder:text-muted resize-none"
           />
           <button
             type="submit"
@@ -492,7 +491,7 @@ function Contact() {
 /* ─── Footer ─── */
 function Footer() {
   return (
-    <footer className="border-t border-white/5 py-12">
+    <footer className="border-t border-border py-12">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <span className="text-sm text-muted">
           &copy; {new Date().getFullYear()} Patersclat. All rights reserved.

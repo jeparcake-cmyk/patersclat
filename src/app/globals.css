@@ -1,28 +1,66 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
   --color-accent: #6366f1;
   --color-accent-light: #818cf8;
   --color-accent-dark: #4f46e5;
-  --color-surface: #141414;
-  --color-surface-light: #1e1e1e;
-  --color-muted: #737373;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+:root,
+[data-theme="dark"] {
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-surface: #141414;
+  --color-surface-light: #1e1e1e;
+  --color-muted: #737373;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --glow-opacity: 0.3;
+  --grid-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+  --color-background: #fafafa;
+  --color-foreground: #171717;
+  --color-surface: #f0f0f0;
+  --color-surface-light: #e5e5e5;
+  --color-muted: #6b7280;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --glow-opacity: 0.12;
+  --grid-color: rgba(0, 0, 0, 0.06);
+}
+
 body {
-  background: var(--color-background);
+  background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+/* ─── Utility classes using theme vars ─── */
+.bg-background { background-color: var(--color-background) !important; }
+.bg-surface { background-color: var(--color-surface) !important; }
+.bg-surface-light { background-color: var(--color-surface-light) !important; }
+.text-foreground { color: var(--color-foreground) !important; }
+.text-muted { color: var(--color-muted) !important; }
+.border-border { border-color: var(--color-border) !important; }
+.bg-background\/80 {
+  background-color: color-mix(in srgb, var(--color-background) 80%, transparent) !important;
+}
+.bg-surface\/50 {
+  background-color: color-mix(in srgb, var(--color-surface) 50%, transparent) !important;
+}
+.hover\:bg-surface:hover { background-color: var(--color-surface) !important; }
+.hover\:bg-surface-light:hover { background-color: var(--color-surface-light) !important; }
+.hover\:text-foreground:hover { color: var(--color-foreground) !important; }
+.hover\:border-muted:hover { border-color: var(--color-muted) !important; }
+
+/* ─── Animations ─── */
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -91,7 +129,8 @@ html {
 }
 
 .gradient-border {
-  border: 1px solid rgba(99, 102, 241, 0.15);
+  border: 1px solid var(--color-border);
+  transition: border-color 0.3s;
 }
 
 .gradient-border:hover {
@@ -104,5 +143,13 @@ html {
   height: 600px;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.3;
+  opacity: var(--glow-opacity);
+  transition: opacity 0.3s;
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
