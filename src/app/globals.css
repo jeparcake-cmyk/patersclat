@@ -142,7 +142,7 @@ html {
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  filter: blur(120px);
+  filter: blur(200px);
   opacity: var(--glow-opacity);
   transition: opacity 0.3s;
 }
