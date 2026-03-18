@@ -71,6 +71,23 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="rounded-2xl bg-surface p-10 gradient-border text-center">
               <img
+                src="/team/tom.jpeg"
+                alt="Tom Sclater"
+                className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
+              />
+              <h3 className="text-2xl font-bold">Tom Sclater</h3>
+              <p className="text-accent-light font-medium mt-1">
+                Business Development & Client Relations
+              </p>
+              <p className="text-muted mt-4 leading-relaxed">
+                Your first point of contact. Tom takes the time to understand your
+                business inside and out, ensuring we deliver exactly what you need.
+                He keeps things running smoothly from start to finish.
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-surface p-10 gradient-border text-center">
+              <img
                 src="/team/jake.jpeg"
                 alt="Jake Paterson"
                 className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
@@ -84,23 +101,6 @@ export default function AboutPage() {
                 concepts to the final line of code. He obsesses over the details so
                 your website looks and performs flawlessly. If there&apos;s a pixel out
                 of place, he&apos;ll find it.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-surface p-10 gradient-border text-center">
-              <img
-                src="/team/tom.jpeg"
-                alt="Tom Sclater"
-                className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
-              />
-              <h3 className="text-2xl font-bold">Tom Sclater</h3>
-              <p className="text-accent-light font-medium mt-1">
-                Business Development & Client Relations
-              </p>
-              <p className="text-muted mt-4 leading-relaxed">
-                Your first point of contact. Tom takes the time to understand your
-                business inside and out, ensuring we deliver exactly what you need.
-                He keeps things running smoothly from start to finish.
               </p>
             </div>
           </div>
