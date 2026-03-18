@@ -8,6 +8,7 @@ export default function Home() {
       <Services />
       <Process />
       <Team />
+      <Reviews />
       <Pricing />
       <Contact />
       <Footer />
@@ -293,6 +294,90 @@ function Team() {
               keeps things running smoothly from start to finish.
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Reviews ─── */
+const reviews = [
+  {
+    name: "Sarah Mitchell",
+    business: "Mitchell's Bakery",
+    text: "Jake and Tom completely transformed our online presence. We went from having no website to a beautiful one that actually brings in new customers every week. Worth every penny.",
+    stars: 5,
+  },
+  {
+    name: "David Chen",
+    business: "Chen Plumbing & Heating",
+    text: "As someone who knows nothing about websites, Tom made the whole process painless. He explained everything clearly and Jake delivered a site that looks way more expensive than it was.",
+    stars: 5,
+  },
+  {
+    name: "Emma Thompson",
+    business: "Bloom Floral Design",
+    text: "Our bookings have doubled since the new site went live. The design is gorgeous and our customers always comment on how easy it is to use. Highly recommend Patersclat.",
+    stars: 5,
+  },
+  {
+    name: "Marcus Wright",
+    business: "Wright Fitness Studio",
+    text: "They built us an online booking system and a clean, modern website in under two weeks. The ongoing support has been brilliant too - always quick to help when we need changes.",
+    stars: 5,
+  },
+];
+
+function Reviews() {
+  return (
+    <section id="reviews" className="py-32 bg-surface/50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-20">
+          <span className="text-accent-light text-sm font-mono uppercase tracking-widest">
+            Testimonials
+          </span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight">
+            What our clients
+            <br />
+            <span className="gradient-text">say about us</span>
+          </h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {reviews.map((review) => (
+            <div
+              key={review.name}
+              className="rounded-2xl bg-surface p-8 gradient-border"
+            >
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: review.stars }).map((_, i) => (
+                  <svg
+                    key={i}
+                    className="w-5 h-5 text-amber-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-muted leading-relaxed italic">
+                &ldquo;{review.text}&rdquo;
+              </p>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-sm font-bold text-white">
+                  {review.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{review.name}</p>
+                  <p className="text-muted text-xs">{review.business}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
