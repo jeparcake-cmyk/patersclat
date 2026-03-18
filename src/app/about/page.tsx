@@ -70,9 +70,11 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="rounded-2xl bg-surface p-10 gradient-border text-center">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 mx-auto mb-6 flex items-center justify-center text-4xl font-bold text-white">
-                JP
-              </div>
+              <img
+                src="/team/jake.jpeg"
+                alt="Jake Paterson"
+                className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
+              />
               <h3 className="text-2xl font-bold">Jake Paterson</h3>
               <p className="text-accent-light font-medium mt-1">
                 Web Designer & Developer
@@ -86,9 +88,11 @@ export default function AboutPage() {
             </div>
 
             <div className="rounded-2xl bg-surface p-10 gradient-border text-center">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 mx-auto mb-6 flex items-center justify-center text-4xl font-bold text-white">
-                TS
-              </div>
+              <img
+                src="/team/tom.jpeg"
+                alt="Tom Sclater"
+                className="w-28 h-28 rounded-full mx-auto mb-6 object-cover"
+              />
               <h3 className="text-2xl font-bold">Tom Sclater</h3>
               <p className="text-accent-light font-medium mt-1">
                 Business Development & Client Relations
