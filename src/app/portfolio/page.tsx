@@ -17,6 +17,24 @@ const projects = [
     href: "/demo/london-plumber",
     color: "from-blue-900 to-blue-700",
   },
+  {
+    title: "The Golden Fork",
+    category: "Restaurant — Notting Hill",
+    description:
+      "An elegant, warm-toned website for an Italian restaurant. Showcases the menu, photo gallery, customer reviews, and online table reservations.",
+    features: ["Menu display", "Table booking form", "Photo gallery", "Reviews", "Opening hours"],
+    href: "/demo/italian-restaurant",
+    color: "from-amber-900 to-red-900",
+  },
+  {
+    title: "Alex Carter Fitness",
+    category: "Personal Trainer — East London",
+    description:
+      "A bold, high-energy website for a personal trainer. Highlights services, client transformations, pricing packages, and a free consultation booking form.",
+    features: ["Transformation stats", "Pricing tables", "Credentials", "Free session CTA", "Testimonials"],
+    href: "/demo/personal-trainer",
+    color: "from-gray-900 to-lime-900",
+  },
 ];
 
 export default function PortfolioPage() {
