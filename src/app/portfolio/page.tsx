@@ -35,6 +35,15 @@ const projects = [
     href: "/demo/personal-trainer",
     color: "from-gray-900 to-lime-900",
   },
+  {
+    title: "Pusher Music",
+    category: "Music Sync & Licensing — Global",
+    description:
+      "A sleek, dark-themed infinite scroll site for a music supervision company. Showcases 15 years of iconic film, TV, and brand placements alongside their roster of composers and artists.",
+    features: ["Infinite scroll feed", "Instagram-style grid", "Filter by type", "196 image cards", "Year markers"],
+    href: "/demo/pusher-music",
+    color: "from-black to-purple-950",
+  },
 ];
 
 export default function PortfolioPage() {
