@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 
-// Feed items in Instagram posting order: placement then artist, by year
 const feedItems: { type: "placement" | "artist"; src: string; label: string; year: number }[] = [
-  // 2025
   { type: "placement", src: "/pusher/placements/Alien Earth (2025).png", label: "Alien Earth", year: 2025 },
   { type: "artist", src: "/pusher/artists/1128 (2025).png", label: "1128", year: 2025 },
   { type: "placement", src: "/pusher/placements/Final Destination Bloodlines (2025).png", label: "Final Destination Bloodlines", year: 2025 },
@@ -17,7 +15,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Finishing Move (2025).png", label: "Finishing Move", year: 2025 },
   { type: "placement", src: "/pusher/placements/Porsche (2025).png", label: "Porsche", year: 2025 },
   { type: "artist", src: "/pusher/artists/Ursine Vulpine (2025).png", label: "Ursine Vulpine", year: 2025 },
-  // 2024
   { type: "placement", src: "/pusher/placements/Love Lies Bleeding (2024).png", label: "Love Lies Bleeding", year: 2024 },
   { type: "artist", src: "/pusher/artists/Walton (2024).png", label: "Walton", year: 2024 },
   { type: "placement", src: "/pusher/placements/The Amateur (2024).png", label: "The Amateur", year: 2024 },
@@ -30,7 +27,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Human Origin (2024).png", label: "Human Origin", year: 2024 },
   { type: "placement", src: "/pusher/placements/Furiosa A Mad Max Saga (2024).png", label: "Furiosa: A Mad Max Saga", year: 2024 },
   { type: "artist", src: "/pusher/artists/Matthew Chastney (2024).png", label: "Matthew Chastney", year: 2024 },
-  // 2023
   { type: "placement", src: "/pusher/placements/Google (2023).png", label: "Google", year: 2023 },
   { type: "artist", src: "/pusher/artists/Martin Wiklund (2023).png", label: "Martin Wiklund", year: 2023 },
   { type: "placement", src: "/pusher/placements/YSL Pure Shot (2023).png", label: "YSL Pure Shot", year: 2023 },
@@ -43,7 +39,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Ursine Vulpine 2 (2023).png", label: "Ursine Vulpine", year: 2023 },
   { type: "placement", src: "/pusher/placements/Oppenheimer (2023).png", label: "Oppenheimer", year: 2023 },
   { type: "artist", src: "/pusher/artists/Matthew Chastney (2023).png", label: "Matthew Chastney", year: 2023 },
-  // 2022
   { type: "placement", src: "/pusher/placements/The Batman (2022).png", label: "The Batman", year: 2022 },
   { type: "artist", src: "/pusher/artists/Boxsta (2022).png", label: "Boxsta", year: 2022 },
   { type: "placement", src: "/pusher/placements/Elvis (2022).png", label: "Elvis", year: 2022 },
@@ -58,7 +53,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Superhuman 2 (2022).png", label: "Superhuman", year: 2022 },
   { type: "placement", src: "/pusher/placements/Dangerous Liaisons (2022).png", label: "Dangerous Liaisons", year: 2022 },
   { type: "artist", src: "/pusher/artists/Fort Nowhere (2022).png", label: "Fort Nowhere", year: 2022 },
-  // 2021
   { type: "placement", src: "/pusher/placements/Adidas (2021).png", label: "Adidas", year: 2021 },
   { type: "artist", src: "/pusher/artists/Maestro Harrell (2021).png", label: "Maestro Harrell", year: 2021 },
   { type: "placement", src: "/pusher/placements/Zack Snyder's Justice League (2021).png", label: "Zack Snyder's Justice League", year: 2021 },
@@ -71,7 +65,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Calvin Markus (2021).png", label: "Calvin Markus", year: 2021 },
   { type: "placement", src: "/pusher/placements/House Of Gucci (2021).png", label: "House of Gucci", year: 2021 },
   { type: "artist", src: "/pusher/artists/Calvin Markus 2 (2021).png", label: "Calvin Markus", year: 2021 },
-  // 2020
   { type: "placement", src: "/pusher/placements/VW Golf (2020).png", label: "VW Golf", year: 2020 },
   { type: "artist", src: "/pusher/artists/Campfire (2020).png", label: "Campfire", year: 2020 },
   { type: "placement", src: "/pusher/placements/Porsche Dream Aloud (2020).png", label: "Porsche: Dream Aloud", year: 2020 },
@@ -84,7 +77,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/The Undefeated (2020).png", label: "The Undefeated", year: 2020 },
   { type: "placement", src: "/pusher/placements/Audi Scary Beautiful (2020).png", label: "Audi: Scary Beautiful", year: 2020 },
   { type: "artist", src: "/pusher/artists/Wildernessa (2020).png", label: "Wildernessa", year: 2020 },
-  // 2019
   { type: "placement", src: "/pusher/placements/Joker (2019).png", label: "Joker", year: 2019 },
   { type: "artist", src: "/pusher/artists/Superhuman (2019).png", label: "Superhuman", year: 2019 },
   { type: "placement", src: "/pusher/placements/Ad Astra (2019).png", label: "Ad Astra", year: 2019 },
@@ -99,7 +91,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Ted Regklis (2019).png", label: "Ted Regklis", year: 2019 },
   { type: "placement", src: "/pusher/placements/The Crown (2019).png", label: "The Crown", year: 2019 },
   { type: "artist", src: "/pusher/artists/Fort Nowhere (2019).png", label: "Fort Nowhere", year: 2019 },
-  // 2018
   { type: "placement", src: "/pusher/placements/Hunter Kiler (2018).png", label: "Hunter Killer", year: 2018 },
   { type: "artist", src: "/pusher/artists/Hyper (2018).png", label: "Hyper", year: 2018 },
   { type: "placement", src: "/pusher/placements/1517 To Paris (2018).png", label: "15:17 To Paris", year: 2018 },
@@ -112,7 +103,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/François-Paul Aïche (2018).png", label: "François-Paul Aïche", year: 2018 },
   { type: "placement", src: "/pusher/placements/Samsung 8K TV (2018).png", label: "Samsung 8K TV", year: 2018 },
   { type: "artist", src: "/pusher/artists/Superhuman 2 (2018).png", label: "Superhuman", year: 2018 },
-  // 2017
   { type: "placement", src: "/pusher/placements/Blade Runner 2049 (2017).png", label: "Blade Runner 2049", year: 2017 },
   { type: "artist", src: "/pusher/artists/Ian Miller (2017).png", label: "Ian Miller", year: 2017 },
   { type: "placement", src: "/pusher/placements/Alien Covenant (2017).png", label: "Alien: Covenant", year: 2017 },
@@ -125,7 +115,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Human Origin (2017).png", label: "Human Origin", year: 2017 },
   { type: "placement", src: "/pusher/placements/Star Wars Last Jedi (2017).png", label: "Star Wars: The Last Jedi", year: 2017 },
   { type: "artist", src: "/pusher/artists/Ursine Vulpine (2017) 2.png", label: "Ursine Vulpine", year: 2017 },
-  // 2016
   { type: "placement", src: "/pusher/placements/Star Wars Force Awakens (2016).png", label: "Star Wars: The Force Awakens", year: 2016 },
   { type: "artist", src: "/pusher/artists/Ursine Vulpine (2016).png", label: "Ursine Vulpine", year: 2016 },
   { type: "placement", src: "/pusher/placements/The Tale Of Thomas Burberry (2016).png", label: "Burberry: The Tale Of Thomas Burberry", year: 2016 },
@@ -138,7 +127,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Superhuman (2016).png", label: "Superhuman", year: 2016 },
   { type: "placement", src: "/pusher/placements/Legend Of Tarzan (2016).png", label: "The Legend of Tarzan", year: 2016 },
   { type: "artist", src: "/pusher/artists/Benoît Lefèvre (2016).png", label: "Benoît Lefèvre", year: 2016 },
-  // 2015
   { type: "placement", src: "/pusher/placements/Mad Max Fury Road (2015).png", label: "Mad Max: Fury Road", year: 2015 },
   { type: "artist", src: "/pusher/artists/Superhuman (2015).png", label: "Superhuman", year: 2015 },
   { type: "placement", src: "/pusher/placements/The Martian (2015).png", label: "The Martian", year: 2015 },
@@ -151,7 +139,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Superhuman 2 (2015).png", label: "Superhuman", year: 2015 },
   { type: "placement", src: "/pusher/placements/Selma (2015).png", label: "Selma", year: 2015 },
   { type: "artist", src: "/pusher/artists/Zack Hemsey 2 (2015).png", label: "Zack Hemsey", year: 2015 },
-  // 2014
   { type: "placement", src: "/pusher/placements/Dawn Of The Planet Of The Apes (2014).png", label: "Dawn of the Planet of the Apes", year: 2014 },
   { type: "artist", src: "/pusher/artists/Superhuman (2014).png", label: "Superhuman", year: 2014 },
   { type: "placement", src: "/pusher/placements/Jack Ryan (2014).png", label: "Jack Ryan", year: 2014 },
@@ -164,7 +151,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/DJ Shadow (2014).png", label: "DJ Shadow", year: 2014 },
   { type: "placement", src: "/pusher/placements/Captain America The Winter Soldier (2014).png", label: "Captain America: The Winter Soldier", year: 2014 },
   { type: "artist", src: "/pusher/artists/1128 (2014).png", label: "1128", year: 2014 },
-  // 2013
   { type: "placement", src: "/pusher/placements/Captain Phillips (2013).png", label: "Captain Phillips", year: 2013 },
   { type: "artist", src: "/pusher/artists/Dean Valentine 2 (2013).png", label: "Dean Valentine", year: 2013 },
   { type: "placement", src: "/pusher/placements/Wolverine (2013).png", label: "Wolverine", year: 2013 },
@@ -177,7 +163,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Superhuman 2 (2013).png", label: "Superhuman", year: 2013 },
   { type: "placement", src: "/pusher/placements/Call Of Duty Black Ops II (2013).png", label: "Call of Duty: Black Ops II", year: 2013 },
   { type: "artist", src: "/pusher/artists/The Crystal Method (2013).png", label: "The Crystal Method", year: 2013 },
-  // 2012
   { type: "placement", src: "/pusher/placements/Abraham Lincoln Vampire Hunter (2012).png", label: "Abraham Lincoln: Vampire Hunter", year: 2012 },
   { type: "artist", src: "/pusher/artists/Hanna Lim (2012).png", label: "Hanna Lim", year: 2012 },
   { type: "placement", src: "/pusher/placements/Hunger Games Catching Fire (2012).png", label: "Hunger Games: Catching Fire", year: 2012 },
@@ -190,7 +175,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Alan Griffiths (2012).png", label: "Alan Griffiths", year: 2012 },
   { type: "placement", src: "/pusher/placements/Snow White & The Huntsman (2012).png", label: "Snow White & The Huntsman", year: 2012 },
   { type: "artist", src: "/pusher/artists/Lawless (2012).png", label: "Lawless", year: 2012 },
-  // 2011
   { type: "placement", src: "/pusher/placements/Jayne Eyre (2011).png", label: "Jane Eyre", year: 2011 },
   { type: "artist", src: "/pusher/artists/Jeff Cardoni (2011).png", label: "Jeff Cardoni", year: 2011 },
   { type: "placement", src: "/pusher/placements/Man On A Ledge (2011).png", label: "Man On A Ledge", year: 2011 },
@@ -203,7 +187,6 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Heavy Young Heathens (2011).png", label: "Heavy Young Heathens", year: 2011 },
   { type: "placement", src: "/pusher/placements/Green Lantern (2011).png", label: "Green Lantern", year: 2011 },
   { type: "artist", src: "/pusher/artists/Guy-Roger Duvert (2011).png", label: "Guy-Roger Duvert", year: 2011 },
-  // 2010
   { type: "placement", src: "/pusher/placements/Inception (2010).png", label: "Inception", year: 2010 },
   { type: "artist", src: "/pusher/artists/Zack Hemsey (2010).png", label: "Zack Hemsey", year: 2010 },
   { type: "placement", src: "/pusher/placements/Knight And Day (2010).png", label: "Knight & Day", year: 2010 },
@@ -218,7 +201,7 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Echolab (2010).png", label: "Echolab", year: 2010 },
 ];
 
-// Fibonacci sphere distribution for even spacing
+// Fibonacci sphere for even distribution
 function fibSphere(n: number): { x: number; y: number; z: number }[] {
   const points: { x: number; y: number; z: number }[] = [];
   const golden = (1 + Math.sqrt(5)) / 2;
@@ -240,15 +223,12 @@ export default function PusherMusicPage() {
     rotX: 0.3,
     rotY: 0,
     velX: 0,
-    velY: 0.002,
-    zoom: 1,
-    targetZoom: 1,
+    velY: 0.003,
     dragging: false,
     lastX: 0,
     lastY: 0,
     images: [] as (HTMLImageElement | null)[],
     loaded: 0,
-    hovered: -1,
     points: fibSphere(feedItems.length),
   });
   const [selected, setSelected] = useState<number | null>(null);
@@ -262,26 +242,14 @@ export default function PusherMusicPage() {
     feedItems.forEach((item, i) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.onload = () => {
-        s.images[i] = img;
-        s.loaded++;
-        setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100));
-      };
-      img.onerror = () => {
-        s.loaded++;
-        setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100));
-      };
+      img.onload = () => { s.images[i] = img; s.loaded++; setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100)); };
+      img.onerror = () => { s.loaded++; setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100)); };
       img.src = item.src;
     });
   }, []);
 
-  // Hide hint after 4s
-  useEffect(() => {
-    const t = setTimeout(() => setShowHint(false), 4000);
-    return () => clearTimeout(t);
-  }, []);
+  useEffect(() => { const t = setTimeout(() => setShowHint(false), 4000); return () => clearTimeout(t); }, []);
 
-  // Canvas render loop
   const render = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -289,7 +257,6 @@ export default function PusherMusicPage() {
     if (!ctx) return;
     const s = stateRef.current;
 
-    // Size canvas to window
     const dpr = window.devicePixelRatio || 1;
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -299,256 +266,149 @@ export default function PusherMusicPage() {
     canvas.style.height = h + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Clear
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, w, h);
 
-    // Draw subtle star field
-    ctx.fillStyle = "rgba(255,255,255,0.15)";
-    for (let i = 0; i < 120; i++) {
+    // Subtle stars
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    for (let i = 0; i < 100; i++) {
       const sx = ((i * 7919 + 1) % w);
       const sy = ((i * 6271 + 3) % h);
-      const sr = ((i * 3571) % 3) * 0.3 + 0.3;
       ctx.beginPath();
-      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.arc(sx, sy, ((i * 3571) % 3) * 0.25 + 0.3, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Physics
+    // Physics — infinite smooth rotation
     if (!s.dragging) {
       s.rotY += s.velY;
       s.rotX += s.velX;
-      s.velX *= 0.97;
-      s.velY *= 0.97;
-      if (Math.abs(s.velY) < 0.0005) s.velY = 0.002; // gentle auto-rotate
+      s.velX *= 0.98;
+      s.velY *= 0.98;
+      if (Math.abs(s.velY) < 0.001) s.velY = 0.003;
     }
-    s.zoom += (s.targetZoom - s.zoom) * 0.1;
 
-    const radius = Math.min(w, h) * 0.32 * s.zoom;
-    // Cards grow gently with zoom (sqrt gives partial scaling)
-    const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
-    const cardW = 70 * cardZoom;
-    const cardH = 88 * cardZoom;
     const cx = w / 2;
     const cy = h / 2;
+    const radius = Math.min(w, h) * 0.38;
+    // Card size tuned so ~25% overlap with 196 cards on sphere
+    const cardW = 95;
+    const cardH = 119;
 
-    // Transform and sort points by Z for painter's algorithm
     const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
     const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
 
+    // Project all points
     const projected = s.points.map((p, i) => {
-      // Rotate Y
       let x = p.x * cosY - p.z * sinY;
       let z = p.x * sinY + p.z * cosY;
       let y = p.y;
-      // Rotate X
       const y2 = y * cosX - z * sinX;
       const z2 = y * sinX + z * cosX;
-      y = y2;
-      z = z2;
-
-      const scale = 1 / (1 - z * 0.4); // perspective
-      return {
-        sx: cx + x * radius * scale,
-        sy: cy + y * radius * scale,
-        z,
-        scale,
-        i,
-      };
+      return { sx: cx + x * radius, sy: cy + y2 * radius, z: z2, i };
     });
 
+    // Sort back-to-front
     projected.sort((a, b) => a.z - b.z);
 
-    // Draw cards
     for (const pt of projected) {
-      const item = feedItems[pt.i];
       const img = s.images[pt.i];
-      const alpha = Math.max(0, Math.min(1, (pt.z + 1) * 0.6 + 0.2));
-      const cw = cardW * pt.scale;
-      const ch = cardH * pt.scale;
+      // Scale and fade based on depth — front cards are full size, back cards smaller
+      const depthScale = 0.55 + 0.45 * ((pt.z + 1) / 2); // 0.55 at back, 1.0 at front
+      const alpha = 0.15 + 0.85 * Math.max(0, (pt.z + 1) / 2); // very faint at back
+      const cw = cardW * depthScale;
+      const ch = cardH * depthScale;
       const px = pt.sx - cw / 2;
       const py = pt.sy - ch / 2;
 
       ctx.globalAlpha = alpha;
 
-      // Draw card shadow
-      ctx.fillStyle = "rgba(0,0,0,0.4)";
+      // Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
       ctx.beginPath();
-      ctx.roundRect(px + 2, py + 2, cw, ch, 4 * pt.scale);
+      ctx.roundRect(px + 2, py + 2, cw, ch, 5 * depthScale);
       ctx.fill();
 
-      // Draw card background
-      if (item.type === "placement") {
-        ctx.fillStyle = "#111";
-      } else {
-        ctx.fillStyle = "#8B7EC8"; // lilac fallback
-      }
-      ctx.beginPath();
-      ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
-      ctx.fill();
-
-      // Draw image if loaded
+      // Draw image or fallback
       if (img) {
         ctx.save();
         ctx.beginPath();
-        ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
+        ctx.roundRect(px, py, cw, ch, 5 * depthScale);
         ctx.clip();
-        // Cover fit
-        const imgRatio = img.width / img.height;
-        const cardRatio = cw / ch;
+        const imgR = img.width / img.height;
+        const cardR = cw / ch;
         let dw: number, dh: number, dx: number, dy: number;
-        if (imgRatio > cardRatio) {
-          dh = ch;
-          dw = ch * imgRatio;
-          dx = px - (dw - cw) / 2;
-          dy = py;
-        } else {
-          dw = cw;
-          dh = cw / imgRatio;
-          dx = px;
-          dy = py - (dh - ch) / 2;
-        }
+        if (imgR > cardR) { dh = ch; dw = ch * imgR; dx = px - (dw - cw) / 2; dy = py; }
+        else { dw = cw; dh = cw / imgR; dx = px; dy = py - (dh - ch) / 2; }
         ctx.drawImage(img, dx, dy, dw, dh);
         ctx.restore();
-      }
-
-      // Hover glow
-      if (s.hovered === pt.i) {
-        ctx.strokeStyle = "rgba(255,255,255,0.8)";
-        ctx.lineWidth = 2 * pt.scale;
+      } else {
+        ctx.fillStyle = feedItems[pt.i].type === "placement" ? "#111" : "#8B7EC8";
         ctx.beginPath();
-        ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
-        ctx.stroke();
+        ctx.roundRect(px, py, cw, ch, 5 * depthScale);
+        ctx.fill();
       }
     }
 
     ctx.globalAlpha = 1;
-
-    // Draw center text
-    ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(255,255,255,0.08)";
-    ctx.font = `900 ${Math.min(120, w * 0.1)}px system-ui, sans-serif`;
-    ctx.fillText("PUSHER", cx, cy + Math.min(120, w * 0.1) * 0.35);
-
     requestAnimationFrame(render);
   }, []);
 
-  useEffect(() => {
-    requestAnimationFrame(render);
-  }, [render]);
+  useEffect(() => { requestAnimationFrame(render); }, [render]);
 
-  // Mouse/touch handlers
+  // Interaction handlers
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const s = stateRef.current;
 
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let dragMoved = false;
+    let dragStartX = 0, dragStartY = 0, dragMoved = false;
 
     const onDown = (ex: number, ey: number) => {
       s.dragging = true;
-      s.lastX = ex;
-      s.lastY = ey;
-      dragStartX = ex;
-      dragStartY = ey;
+      s.lastX = ex; s.lastY = ey;
+      dragStartX = ex; dragStartY = ey;
       dragMoved = false;
-      s.velX = 0;
-      s.velY = 0;
+      s.velX = 0; s.velY = 0;
     };
+
     const onMove = (ex: number, ey: number) => {
-      if (s.dragging) {
-        const dx = ex - s.lastX;
-        const dy = ey - s.lastY;
-        s.velY = -dx * 0.003;
-        s.velX = -dy * 0.003;
-        s.rotY -= dx * 0.005;
-        s.rotX -= dy * 0.005;
-        s.lastX = ex;
-        s.lastY = ey;
-        const totalDx = ex - dragStartX;
-        const totalDy = ey - dragStartY;
-        if (Math.abs(totalDx) > 5 || Math.abs(totalDy) > 5) dragMoved = true;
-      }
-
-      // Hit test for hover
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const cx = w / 2;
-      const cy = h / 2;
-      const radius = Math.min(w, h) * 0.32 * s.zoom;
-      const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
-      const cardW = 70 * cardZoom;
-      const cardH = 88 * cardZoom;
-      const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
-      const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
-
-      let closest = -1;
-      let closestDist = Infinity;
-
-      for (let i = 0; i < s.points.length; i++) {
-        const p = s.points[i];
-        let x = p.x * cosY - p.z * sinY;
-        let z = p.x * sinY + p.z * cosY;
-        let y = p.y;
-        const y2 = y * cosX - z * sinX;
-        const z2 = y * sinX + z * cosX;
-        y = y2;
-        z = z2;
-        if (z < -0.2) continue; // skip back-facing
-
-        const scale = 1 / (1 - z * 0.4);
-        const sx = cx + x * radius * scale;
-        const sy = cy + y * radius * scale;
-        const cw = cardW * scale;
-        const ch = cardH * scale;
-
-        if (ex >= sx - cw / 2 && ex <= sx + cw / 2 && ey >= sy - ch / 2 && ey <= sy + ch / 2) {
-          const d = Math.abs(z);
-          if (d < closestDist) {
-            closest = i;
-            closestDist = d;
-          }
-        }
-      }
-      s.hovered = closest;
-      canvas.style.cursor = closest >= 0 ? "pointer" : "grab";
+      if (!s.dragging) return;
+      const dx = ex - s.lastX;
+      const dy = ey - s.lastY;
+      // Globe follows finger: drag right = rotate right
+      s.velY = -dx * 0.004;
+      s.velX = -dy * 0.004;
+      s.rotY -= dx * 0.006;
+      s.rotX -= dy * 0.006;
+      s.lastX = ex; s.lastY = ey;
+      if (Math.abs(ex - dragStartX) > 5 || Math.abs(ey - dragStartY) > 5) dragMoved = true;
     };
+
     const onUp = () => { s.dragging = false; };
 
     const hitTest = (ex: number, ey: number): number => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const cx = w / 2;
-      const cy = h / 2;
-      const radius = Math.min(w, h) * 0.32 * s.zoom;
-      const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
-      const cardW = 70 * cardZoom;
-      const cardH = 88 * cardZoom;
+      const w = window.innerWidth, h = window.innerHeight;
+      const cx = w / 2, cy = h / 2;
+      const radius = Math.min(w, h) * 0.38;
       const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
       const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
-      let closest = -1;
-      let closestZ = -Infinity;
+      let best = -1, bestZ = -Infinity;
       for (let i = 0; i < s.points.length; i++) {
         const p = s.points[i];
         let x = p.x * cosY - p.z * sinY;
         let z = p.x * sinY + p.z * cosY;
-        let y = p.y;
-        const y2 = y * cosX - z * sinX;
-        const z2 = y * sinX + z * cosX;
-        y = y2; z = z2;
-        if (z < -0.2) continue;
-        const scale = 1 / (1 - z * 0.4);
-        const sx = cx + x * radius * scale;
-        const sy = cy + y * radius * scale;
-        const cw = cardW * scale;
-        const ch = cardH * scale;
+        const y2 = p.y * cosX - z * sinX;
+        const z2 = p.y * sinX + z * cosX;
+        if (z2 < 0) continue; // only front-facing
+        const depthScale = 0.55 + 0.45 * ((z2 + 1) / 2);
+        const cw = 95 * depthScale, ch = 119 * depthScale;
+        const sx = cx + x * radius, sy = cy + y2 * radius;
         if (ex >= sx - cw / 2 && ex <= sx + cw / 2 && ey >= sy - ch / 2 && ey <= sy + ch / 2) {
-          if (z > closestZ) { closest = i; closestZ = z; }
+          if (z2 > bestZ) { best = i; bestZ = z2; }
         }
       }
-      return closest;
+      return best;
     };
 
     const onClick = (e: MouseEvent) => {
@@ -560,71 +420,44 @@ export default function PusherMusicPage() {
     const onTouchEnd = (e: TouchEvent) => {
       s.dragging = false;
       if (!dragMoved && e.changedTouches.length > 0) {
-        const touch = e.changedTouches[0];
-        const hit = hitTest(touch.clientX, touch.clientY);
+        const t = e.changedTouches[0];
+        const hit = hitTest(t.clientX, t.clientY);
         if (hit >= 0) setSelected(hit);
       }
     };
-
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      // Much more responsive zoom — works with mouse wheel and trackpad
-      const delta = e.deltaY > 0 ? -0.15 : 0.15;
-      s.targetZoom = Math.max(0.3, Math.min(4, s.targetZoom + delta));
-    };
-
-    // Pinch-to-zoom for touch devices
-    let lastPinchDist = 0;
-    const onTouchMovePinch = (e: TouchEvent) => {
-      if (e.touches.length === 2) {
-        e.preventDefault();
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (lastPinchDist > 0) {
-          const pinchDelta = (dist - lastPinchDist) * 0.005;
-          s.targetZoom = Math.max(0.3, Math.min(4, s.targetZoom + pinchDelta));
-        }
-        lastPinchDist = dist;
-      } else {
-        lastPinchDist = 0;
-      }
-    };
-    const onTouchEndPinch = () => { lastPinchDist = 0; };
 
     const mouseDown = (e: MouseEvent) => onDown(e.clientX, e.clientY);
     const mouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY);
     const touchStart = (e: TouchEvent) => { e.preventDefault(); onDown(e.touches[0].clientX, e.touches[0].clientY); };
     const touchMove = (e: TouchEvent) => { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); };
 
+    // Prevent scroll on the page
+    const preventScroll = (e: Event) => e.preventDefault();
+
     canvas.addEventListener("mousedown", mouseDown);
     window.addEventListener("mousemove", mouseMove);
     window.addEventListener("mouseup", onUp);
     canvas.addEventListener("click", onClick);
-    canvas.addEventListener("wheel", onWheel, { passive: false });
+    canvas.addEventListener("wheel", preventScroll, { passive: false });
     canvas.addEventListener("touchstart", touchStart, { passive: false });
     canvas.addEventListener("touchmove", touchMove, { passive: false });
-    canvas.addEventListener("touchmove", onTouchMovePinch, { passive: false });
     canvas.addEventListener("touchend", onTouchEnd);
-    canvas.addEventListener("touchend", onTouchEndPinch);
 
     return () => {
       canvas.removeEventListener("mousedown", mouseDown);
       window.removeEventListener("mousemove", mouseMove);
       window.removeEventListener("mouseup", onUp);
       canvas.removeEventListener("click", onClick);
-      canvas.removeEventListener("wheel", onWheel);
+      canvas.removeEventListener("wheel", preventScroll);
       canvas.removeEventListener("touchstart", touchStart);
       canvas.removeEventListener("touchmove", touchMove);
-      canvas.removeEventListener("touchmove", onTouchMovePinch);
       canvas.removeEventListener("touchend", onTouchEnd);
-      canvas.removeEventListener("touchend", onTouchEndPinch);
     };
   }, []);
 
   return (
     <div style={{ background: "#000", width: "100vw", height: "100vh", overflow: "hidden", position: "relative" }}>
-      {/* Loading overlay */}
+      {/* Loading */}
       {loadProgress < 100 && (
         <div style={{
           position: "absolute", inset: 0, zIndex: 100, background: "#000",
@@ -638,25 +471,19 @@ export default function PusherMusicPage() {
         </div>
       )}
 
-      {/* Canvas */}
-      <canvas
-        ref={canvasRef}
-        style={{ position: "absolute", inset: 0, cursor: "grab" }}
-      />
+      <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, cursor: "grab" }} />
 
-      {/* Top nav overlay */}
+      {/* Top overlay */}
       <div style={{
-        position: "absolute", top: 36, left: 0, right: 0, zIndex: 20,
-        padding: "14px 24px",
+        position: "absolute", top: 36, left: 0, right: 0, zIndex: 20, padding: "14px 24px",
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        background: "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%)",
-        pointerEvents: "none",
+        background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%)", pointerEvents: "none",
       }}>
-        <span style={{ fontSize: 22, fontWeight: 900, color: "#fff", pointerEvents: "auto" }}>PUSHER</span>
-        <div style={{ display: "flex", gap: 24, fontSize: 12, letterSpacing: 2, textTransform: "uppercase", pointerEvents: "auto" }}>
-          <span style={{ color: "rgba(255,255,255,0.5)" }}>Sync Licensing</span>
-          <span style={{ color: "rgba(255,255,255,0.5)" }}>Bespoke Composition</span>
-          <span style={{ color: "rgba(255,255,255,0.5)" }}>Music Supervision</span>
+        <span style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>PUSHER</span>
+        <div style={{ display: "flex", gap: 24, fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>
+          <span style={{ color: "rgba(255,255,255,0.4)" }}>Sync Licensing</span>
+          <span style={{ color: "rgba(255,255,255,0.4)" }}>Bespoke Composition</span>
+          <span style={{ color: "rgba(255,255,255,0.4)" }}>Music Supervision</span>
         </div>
       </div>
 
@@ -666,109 +493,54 @@ export default function PusherMusicPage() {
           position: "absolute", bottom: 60, left: "50%", transform: "translateX(-50%)",
           zIndex: 20, color: "rgba(255,255,255,0.4)", fontSize: 13,
           letterSpacing: 3, textTransform: "uppercase", textAlign: "center",
-          animation: "pusher-fade 4s ease-in-out",
-          pointerEvents: "none",
+          animation: "pusher-fade 4s ease-in-out", pointerEvents: "none",
         }}>
-          Drag to explore &bull; Scroll to zoom &bull; Click to view
+          Drag to explore &bull; Tap to view
         </div>
       )}
 
-      {/* Zoom controls */}
-      <div style={{
-        position: "absolute", bottom: 24, right: 24, zIndex: 20,
-        display: "flex", flexDirection: "column", gap: 4,
-      }}>
-        <button
-          onClick={() => { stateRef.current.targetZoom = Math.min(4, stateRef.current.targetZoom + 0.3); }}
-          style={{
-            width: 40, height: 40, borderRadius: 8,
-            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
-            color: "#fff", fontSize: 20, cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            backdropFilter: "blur(10px)",
-          }}
-        >+</button>
-        <button
-          onClick={() => { stateRef.current.targetZoom = Math.max(0.3, stateRef.current.targetZoom - 0.3); }}
-          style={{
-            width: 40, height: 40, borderRadius: 8,
-            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
-            color: "#fff", fontSize: 20, cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            backdropFilter: "blur(10px)",
-          }}
-        >-</button>
-      </div>
-
-      {/* Stats bottom-left */}
+      {/* Stats */}
       <div style={{
         position: "absolute", bottom: 24, left: 24, zIndex: 20,
-        color: "rgba(255,255,255,0.25)", fontSize: 11, letterSpacing: 2,
+        color: "rgba(255,255,255,0.2)", fontSize: 11, letterSpacing: 2,
         textTransform: "uppercase", pointerEvents: "none",
       }}>
         196 Placements &bull; 150+ Artists &bull; Since 2010
       </div>
 
-      {/* Selected card modal */}
+      {/* Selected modal */}
       {selected !== null && (
         <div
           style={{
             position: "absolute", inset: 0, zIndex: 50,
             background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
           }}
           onClick={() => setSelected(null)}
         >
-          <div style={{
-            maxWidth: 400, width: "90%", textAlign: "center",
-          }}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div style={{ maxWidth: 400, width: "90%", textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
             <div style={{
               aspectRatio: "4/5", borderRadius: 12, overflow: "hidden",
-              boxShadow: "0 0 80px rgba(255,255,255,0.1)",
-              marginBottom: 24,
+              boxShadow: "0 0 80px rgba(255,255,255,0.1)", marginBottom: 24,
             }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={feedItems[selected].src}
-                alt={feedItems[selected].label}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              <img src={feedItems[selected].src} alt={feedItems[selected].label}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
-            <div style={{ color: "#fff", fontSize: 20, fontWeight: 700 }}>
-              {feedItems[selected].label}
-            </div>
-            <div style={{
-              color: "rgba(255,255,255,0.4)", fontSize: 12,
-              marginTop: 6, letterSpacing: 2, textTransform: "uppercase",
-            }}>
+            <div style={{ color: "#fff", fontSize: 20, fontWeight: 700 }}>{feedItems[selected].label}</div>
+            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 12, marginTop: 6, letterSpacing: 2, textTransform: "uppercase" }}>
               {feedItems[selected].type === "placement" ? "Placement" : "Artist / Composer"} &bull; {feedItems[selected].year}
             </div>
-            <button
-              onClick={() => setSelected(null)}
-              style={{
-                marginTop: 24, padding: "10px 28px",
-                background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
-                color: "#fff", borderRadius: 50, fontSize: 12,
-                cursor: "pointer", letterSpacing: 2, textTransform: "uppercase",
-              }}
-            >
-              Close
-            </button>
+            <button onClick={() => setSelected(null)} style={{
+              marginTop: 24, padding: "10px 28px", background: "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 50,
+              fontSize: 12, cursor: "pointer", letterSpacing: 2, textTransform: "uppercase",
+            }}>Close</button>
           </div>
         </div>
       )}
 
-      <style>{`
-        @keyframes pusher-fade {
-          0% { opacity: 0; }
-          20% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { opacity: 0; }
-        }
-      `}</style>
+      <style>{`@keyframes pusher-fade { 0% { opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }`}</style>
     </div>
   );
 }
