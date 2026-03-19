@@ -227,6 +227,7 @@ export default function PusherMusicPage() {
     dragging: false,
     lastX: 0,
     lastY: 0,
+    zoom: 1,
     images: [] as (HTMLImageElement | null)[],
     loaded: 0,
     points: fibSphere(feedItems.length),
@@ -290,10 +291,10 @@ export default function PusherMusicPage() {
 
     const cx = w / 2;
     const cy = h / 2;
-    const radius = Math.min(w, h) * 0.38;
-    // Card size tuned so ~25% overlap with 196 cards on sphere
-    const cardW = 95;
-    const cardH = 119;
+    const radius = Math.min(w, h) * 0.38 * s.zoom;
+    // Card size scales with zoom so everything zooms together
+    const cardW = 95 * s.zoom;
+    const cardH = 119 * s.zoom;
 
     const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
     const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
@@ -362,7 +363,7 @@ export default function PusherMusicPage() {
     if (!canvas) return;
     const s = stateRef.current;
 
-    let dragStartX = 0, dragStartY = 0, dragMoved = false;
+    let dragStartX = 0, dragStartY = 0, dragMoved = false, lastPinchDist = 0;
 
     const onDown = (ex: number, ey: number) => {
       s.dragging = true;
@@ -376,10 +377,11 @@ export default function PusherMusicPage() {
       if (!s.dragging) return;
       const dx = ex - s.lastX;
       const dy = ey - s.lastY;
-      // Globe follows finger: drag right = rotate right
-      s.velY = -dx * 0.004;
+      // Flip horizontal drag when globe is upside down so it always feels natural
+      const flipH = Math.cos(s.rotX) >= 0 ? 1 : -1;
+      s.velY = -dx * 0.004 * flipH;
       s.velX = -dy * 0.004;
-      s.rotY -= dx * 0.006;
+      s.rotY -= dx * 0.006 * flipH;
       s.rotX -= dy * 0.006;
       s.lastX = ex; s.lastY = ey;
       if (Math.abs(ex - dragStartX) > 5 || Math.abs(ey - dragStartY) > 5) dragMoved = true;
@@ -390,19 +392,19 @@ export default function PusherMusicPage() {
     const hitTest = (ex: number, ey: number): number => {
       const w = window.innerWidth, h = window.innerHeight;
       const cx = w / 2, cy = h / 2;
-      const radius = Math.min(w, h) * 0.38;
+      const radius = Math.min(w, h) * 0.38 * s.zoom;
       const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
       const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
       let best = -1, bestZ = -Infinity;
       for (let i = 0; i < s.points.length; i++) {
         const p = s.points[i];
-        let x = p.x * cosY - p.z * sinY;
-        let z = p.x * sinY + p.z * cosY;
+        const x = p.x * cosY - p.z * sinY;
+        const z = p.x * sinY + p.z * cosY;
         const y2 = p.y * cosX - z * sinX;
         const z2 = p.y * sinX + z * cosX;
-        if (z2 < 0) continue; // only front-facing
+        if (z2 < 0) continue;
         const depthScale = 0.55 + 0.45 * ((z2 + 1) / 2);
-        const cw = 95 * depthScale, ch = 119 * depthScale;
+        const cw = 95 * s.zoom * depthScale, ch = 119 * s.zoom * depthScale;
         const sx = cx + x * radius, sy = cy + y2 * radius;
         if (ex >= sx - cw / 2 && ex <= sx + cw / 2 && ey >= sy - ch / 2 && ey <= sy + ch / 2) {
           if (z2 > bestZ) { best = i; bestZ = z2; }
@@ -428,17 +430,45 @@ export default function PusherMusicPage() {
 
     const mouseDown = (e: MouseEvent) => onDown(e.clientX, e.clientY);
     const mouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY);
-    const touchStart = (e: TouchEvent) => { e.preventDefault(); onDown(e.touches[0].clientX, e.touches[0].clientY); };
-    const touchMove = (e: TouchEvent) => { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); };
+    const touchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastPinchDist = Math.sqrt(dx * dx + dy * dy);
+      } else {
+        onDown(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+    const touchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (lastPinchDist > 0) {
+          const scale = dist / lastPinchDist;
+          s.zoom = Math.max(0.4, Math.min(2.5, s.zoom * scale));
+        }
+        lastPinchDist = dist;
+        dragMoved = true;
+      } else {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
 
-    // Prevent scroll on the page
-    const preventScroll = (e: Event) => e.preventDefault();
+    // Zoom with scroll wheel — globe and cards scale together
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.08 : 0.08;
+      s.zoom = Math.max(0.4, Math.min(2.5, s.zoom + delta));
+    };
 
     canvas.addEventListener("mousedown", mouseDown);
     window.addEventListener("mousemove", mouseMove);
     window.addEventListener("mouseup", onUp);
     canvas.addEventListener("click", onClick);
-    canvas.addEventListener("wheel", preventScroll, { passive: false });
+    canvas.addEventListener("wheel", onWheel, { passive: false });
     canvas.addEventListener("touchstart", touchStart, { passive: false });
     canvas.addEventListener("touchmove", touchMove, { passive: false });
     canvas.addEventListener("touchend", onTouchEnd);
@@ -448,7 +478,7 @@ export default function PusherMusicPage() {
       window.removeEventListener("mousemove", mouseMove);
       window.removeEventListener("mouseup", onUp);
       canvas.removeEventListener("click", onClick);
-      canvas.removeEventListener("wheel", preventScroll);
+      canvas.removeEventListener("wheel", onWheel);
       canvas.removeEventListener("touchstart", touchStart);
       canvas.removeEventListener("touchmove", touchMove);
       canvas.removeEventListener("touchend", onTouchEnd);
