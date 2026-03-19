@@ -325,8 +325,10 @@ export default function PusherMusicPage() {
     s.zoom += (s.targetZoom - s.zoom) * 0.1;
 
     const radius = Math.min(w, h) * 0.32 * s.zoom;
-    const cardW = 70;
-    const cardH = 88;
+    // Cards grow gently with zoom (sqrt gives partial scaling)
+    const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
+    const cardW = 70 * cardZoom;
+    const cardH = 88 * cardZoom;
     const cx = w / 2;
     const cy = h / 2;
 
@@ -459,9 +461,9 @@ export default function PusherMusicPage() {
       if (s.dragging) {
         const dx = ex - s.lastX;
         const dy = ey - s.lastY;
-        s.velY = dx * 0.003;
+        s.velY = -dx * 0.003;
         s.velX = -dy * 0.003;
-        s.rotY += dx * 0.005;
+        s.rotY -= dx * 0.005;
         s.rotX -= dy * 0.005;
         s.lastX = ex;
         s.lastY = ey;
@@ -476,8 +478,9 @@ export default function PusherMusicPage() {
       const cx = w / 2;
       const cy = h / 2;
       const radius = Math.min(w, h) * 0.32 * s.zoom;
-      const cardW = 70;
-      const cardH = 88;
+      const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
+      const cardW = 70 * cardZoom;
+      const cardH = 88 * cardZoom;
       const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
       const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
 
@@ -520,8 +523,9 @@ export default function PusherMusicPage() {
       const cx = w / 2;
       const cy = h / 2;
       const radius = Math.min(w, h) * 0.32 * s.zoom;
-      const cardW = 70;
-      const cardH = 88;
+      const cardZoom = 0.6 + 0.4 * Math.sqrt(s.zoom);
+      const cardW = 70 * cardZoom;
+      const cardH = 88 * cardZoom;
       const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
       const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
       let closest = -1;
