@@ -511,8 +511,29 @@ export default function PusherMusicPage() {
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      s.targetZoom = Math.max(0.4, Math.min(3, s.targetZoom - e.deltaY * 0.001));
+      // Much more responsive zoom — works with mouse wheel and trackpad
+      const delta = e.deltaY > 0 ? -0.15 : 0.15;
+      s.targetZoom = Math.max(0.3, Math.min(4, s.targetZoom + delta));
     };
+
+    // Pinch-to-zoom for touch devices
+    let lastPinchDist = 0;
+    const onTouchMovePinch = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (lastPinchDist > 0) {
+          const pinchDelta = (dist - lastPinchDist) * 0.005;
+          s.targetZoom = Math.max(0.3, Math.min(4, s.targetZoom + pinchDelta));
+        }
+        lastPinchDist = dist;
+      } else {
+        lastPinchDist = 0;
+      }
+    };
+    const onTouchEndPinch = () => { lastPinchDist = 0; };
 
     const mouseDown = (e: MouseEvent) => onDown(e.clientX, e.clientY);
     const mouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY);
@@ -526,7 +547,9 @@ export default function PusherMusicPage() {
     canvas.addEventListener("wheel", onWheel, { passive: false });
     canvas.addEventListener("touchstart", touchStart, { passive: false });
     canvas.addEventListener("touchmove", touchMove, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMovePinch, { passive: false });
     canvas.addEventListener("touchend", onUp);
+    canvas.addEventListener("touchend", onTouchEndPinch);
 
     return () => {
       canvas.removeEventListener("mousedown", mouseDown);
@@ -536,7 +559,9 @@ export default function PusherMusicPage() {
       canvas.removeEventListener("wheel", onWheel);
       canvas.removeEventListener("touchstart", touchStart);
       canvas.removeEventListener("touchmove", touchMove);
+      canvas.removeEventListener("touchmove", onTouchMovePinch);
       canvas.removeEventListener("touchend", onUp);
+      canvas.removeEventListener("touchend", onTouchEndPinch);
     };
   }, []);
 
@@ -590,6 +615,33 @@ export default function PusherMusicPage() {
           Drag to explore &bull; Scroll to zoom &bull; Click to view
         </div>
       )}
+
+      {/* Zoom controls */}
+      <div style={{
+        position: "absolute", bottom: 24, right: 24, zIndex: 20,
+        display: "flex", flexDirection: "column", gap: 4,
+      }}>
+        <button
+          onClick={() => { stateRef.current.targetZoom = Math.min(4, stateRef.current.targetZoom + 0.3); }}
+          style={{
+            width: 40, height: 40, borderRadius: 8,
+            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
+            color: "#fff", fontSize: 20, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            backdropFilter: "blur(10px)",
+          }}
+        >+</button>
+        <button
+          onClick={() => { stateRef.current.targetZoom = Math.max(0.3, stateRef.current.targetZoom - 0.3); }}
+          style={{
+            width: 40, height: 40, borderRadius: 8,
+            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
+            color: "#fff", fontSize: 20, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            backdropFilter: "blur(10px)",
+          }}
+        >-</button>
+      </div>
 
       {/* Stats bottom-left */}
       <div style={{
