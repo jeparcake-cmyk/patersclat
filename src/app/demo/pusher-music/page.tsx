@@ -459,9 +459,9 @@ export default function PusherMusicPage() {
       if (s.dragging) {
         const dx = ex - s.lastX;
         const dy = ey - s.lastY;
-        s.velY = -dx * 0.003;
+        s.velY = dx * 0.003;
         s.velX = -dy * 0.003;
-        s.rotY -= dx * 0.005;
+        s.rotY += dx * 0.005;
         s.rotX -= dy * 0.005;
         s.lastX = ex;
         s.lastY = ey;
