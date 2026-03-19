@@ -460,7 +460,7 @@ export default function PusherMusicPage() {
     // Zoom with scroll wheel — globe and cards scale together
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.08 : 0.08;
+      const delta = e.deltaY > 0 ? -0.03 : 0.03;
       s.zoom = Math.max(0.4, Math.min(2.5, s.zoom + delta));
     };
 
