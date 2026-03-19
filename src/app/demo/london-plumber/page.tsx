@@ -295,7 +295,7 @@ export default function LondonPlumberPage() {
               <a href="#contact" className="plumber-btn-primary">
                 Get a Free Quote
               </a>
-              <a href="tel:02071234567" className="plumber-btn-secondary" style={{ borderColor: 'white', color: 'white' }}>
+              <a href="tel:02071234567" className="plumber-btn-secondary" style={{ background: 'transparent', borderColor: 'white', color: 'white' }}>
                 📞 020 7123 4567
               </a>
             </div>
