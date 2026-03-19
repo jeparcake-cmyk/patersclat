@@ -325,8 +325,8 @@ export default function PusherMusicPage() {
     s.zoom += (s.targetZoom - s.zoom) * 0.1;
 
     const radius = Math.min(w, h) * 0.32 * s.zoom;
-    const cardW = 70 * s.zoom;
-    const cardH = 88 * s.zoom;
+    const cardW = 70;
+    const cardH = 88;
     const cx = w / 2;
     const cy = h / 2;
 
@@ -441,10 +441,17 @@ export default function PusherMusicPage() {
     if (!canvas) return;
     const s = stateRef.current;
 
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragMoved = false;
+
     const onDown = (ex: number, ey: number) => {
       s.dragging = true;
       s.lastX = ex;
       s.lastY = ey;
+      dragStartX = ex;
+      dragStartY = ey;
+      dragMoved = false;
       s.velX = 0;
       s.velY = 0;
     };
@@ -452,12 +459,15 @@ export default function PusherMusicPage() {
       if (s.dragging) {
         const dx = ex - s.lastX;
         const dy = ey - s.lastY;
-        s.velY = dx * 0.003;
-        s.velX = dy * 0.003;
-        s.rotY += dx * 0.005;
-        s.rotX += dy * 0.005;
+        s.velY = -dx * 0.003;
+        s.velX = -dy * 0.003;
+        s.rotY -= dx * 0.005;
+        s.rotX -= dy * 0.005;
         s.lastX = ex;
         s.lastY = ey;
+        const totalDx = ex - dragStartX;
+        const totalDy = ey - dragStartY;
+        if (Math.abs(totalDx) > 5 || Math.abs(totalDy) > 5) dragMoved = true;
       }
 
       // Hit test for hover
@@ -466,8 +476,8 @@ export default function PusherMusicPage() {
       const cx = w / 2;
       const cy = h / 2;
       const radius = Math.min(w, h) * 0.32 * s.zoom;
-      const cardW = 70 * s.zoom;
-      const cardH = 88 * s.zoom;
+      const cardW = 70;
+      const cardH = 88;
       const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
       const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
 
@@ -504,9 +514,52 @@ export default function PusherMusicPage() {
     };
     const onUp = () => { s.dragging = false; };
 
+    const hitTest = (ex: number, ey: number): number => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const cx = w / 2;
+      const cy = h / 2;
+      const radius = Math.min(w, h) * 0.32 * s.zoom;
+      const cardW = 70;
+      const cardH = 88;
+      const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
+      const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
+      let closest = -1;
+      let closestZ = -Infinity;
+      for (let i = 0; i < s.points.length; i++) {
+        const p = s.points[i];
+        let x = p.x * cosY - p.z * sinY;
+        let z = p.x * sinY + p.z * cosY;
+        let y = p.y;
+        const y2 = y * cosX - z * sinX;
+        const z2 = y * sinX + z * cosX;
+        y = y2; z = z2;
+        if (z < -0.2) continue;
+        const scale = 1 / (1 - z * 0.4);
+        const sx = cx + x * radius * scale;
+        const sy = cy + y * radius * scale;
+        const cw = cardW * scale;
+        const ch = cardH * scale;
+        if (ex >= sx - cw / 2 && ex <= sx + cw / 2 && ey >= sy - ch / 2 && ey <= sy + ch / 2) {
+          if (z > closestZ) { closest = i; closestZ = z; }
+        }
+      }
+      return closest;
+    };
+
     const onClick = (e: MouseEvent) => {
-      if (Math.abs(s.velX) > 0.01 || Math.abs(s.velY) > 0.01) return;
-      if (s.hovered >= 0) setSelected(s.hovered);
+      if (dragMoved) return;
+      const hit = hitTest(e.clientX, e.clientY);
+      if (hit >= 0) setSelected(hit);
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      s.dragging = false;
+      if (!dragMoved && e.changedTouches.length > 0) {
+        const touch = e.changedTouches[0];
+        const hit = hitTest(touch.clientX, touch.clientY);
+        if (hit >= 0) setSelected(hit);
+      }
     };
 
     const onWheel = (e: WheelEvent) => {
@@ -548,7 +601,7 @@ export default function PusherMusicPage() {
     canvas.addEventListener("touchstart", touchStart, { passive: false });
     canvas.addEventListener("touchmove", touchMove, { passive: false });
     canvas.addEventListener("touchmove", onTouchMovePinch, { passive: false });
-    canvas.addEventListener("touchend", onUp);
+    canvas.addEventListener("touchend", onTouchEnd);
     canvas.addEventListener("touchend", onTouchEndPinch);
 
     return () => {
@@ -560,7 +613,7 @@ export default function PusherMusicPage() {
       canvas.removeEventListener("touchstart", touchStart);
       canvas.removeEventListener("touchmove", touchMove);
       canvas.removeEventListener("touchmove", onTouchMovePinch);
-      canvas.removeEventListener("touchend", onUp);
+      canvas.removeEventListener("touchend", onTouchEnd);
       canvas.removeEventListener("touchend", onTouchEndPinch);
     };
   }, []);
