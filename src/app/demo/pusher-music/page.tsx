@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 // Feed items in Instagram posting order: placement then artist, by year
 const feedItems: { type: "placement" | "artist"; src: string; label: string; year: number }[] = [
@@ -219,287 +218,448 @@ const feedItems: { type: "placement" | "artist"; src: string; label: string; yea
   { type: "artist", src: "/pusher/artists/Echolab (2010).png", label: "Echolab", year: 2010 },
 ];
 
-// Get unique years for the year markers
-const years = [...new Set(feedItems.map((item) => item.year))].sort((a, b) => b - a);
+// Fibonacci sphere distribution for even spacing
+function fibSphere(n: number): { x: number; y: number; z: number }[] {
+  const points: { x: number; y: number; z: number }[] = [];
+  const golden = (1 + Math.sqrt(5)) / 2;
+  for (let i = 0; i < n; i++) {
+    const theta = (2 * Math.PI * i) / golden;
+    const phi = Math.acos(1 - (2 * (i + 0.5)) / n);
+    points.push({
+      x: Math.sin(phi) * Math.cos(theta),
+      y: Math.sin(phi) * Math.sin(theta),
+      z: Math.cos(phi),
+    });
+  }
+  return points;
+}
 
 export default function PusherMusicPage() {
-  const [visibleCount, setVisibleCount] = useState(18);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [activeFilter, setActiveFilter] = useState<"all" | "placements" | "artists">("all");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stateRef = useRef({
+    rotX: 0.3,
+    rotY: 0,
+    velX: 0,
+    velY: 0.002,
+    zoom: 1,
+    targetZoom: 1,
+    dragging: false,
+    lastX: 0,
+    lastY: 0,
+    images: [] as (HTMLImageElement | null)[],
+    loaded: 0,
+    hovered: -1,
+    points: fibSphere(feedItems.length),
+  });
+  const [selected, setSelected] = useState<number | null>(null);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [showHint, setShowHint] = useState(true);
 
-  const filtered = activeFilter === "all"
-    ? feedItems
-    : feedItems.filter((item) =>
-        activeFilter === "placements" ? item.type === "placement" : item.type === "artist"
-      );
-
+  // Preload images
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setVisibleCount((prev) => Math.min(prev + 12, filtered.length));
+    const s = stateRef.current;
+    s.images = new Array(feedItems.length).fill(null);
+    feedItems.forEach((item, i) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        s.images[i] = img;
+        s.loaded++;
+        setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100));
+      };
+      img.onerror = () => {
+        s.loaded++;
+        setLoadProgress(Math.floor((s.loaded / feedItems.length) * 100));
+      };
+      img.src = item.src;
+    });
+  }, []);
+
+  // Hide hint after 4s
+  useEffect(() => {
+    const t = setTimeout(() => setShowHint(false), 4000);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Canvas render loop
+  const render = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const s = stateRef.current;
+
+    // Size canvas to window
+    const dpr = window.devicePixelRatio || 1;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Clear
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, w, h);
+
+    // Draw subtle star field
+    ctx.fillStyle = "rgba(255,255,255,0.15)";
+    for (let i = 0; i < 120; i++) {
+      const sx = ((i * 7919 + 1) % w);
+      const sy = ((i * 6271 + 3) % h);
+      const sr = ((i * 3571) % 3) * 0.3 + 0.3;
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Physics
+    if (!s.dragging) {
+      s.rotY += s.velY;
+      s.rotX += s.velX;
+      s.velX *= 0.97;
+      s.velY *= 0.97;
+      if (Math.abs(s.velY) < 0.0005) s.velY = 0.002; // gentle auto-rotate
+    }
+    s.zoom += (s.targetZoom - s.zoom) * 0.1;
+
+    const radius = Math.min(w, h) * 0.32 * s.zoom;
+    const cardW = 70 * s.zoom;
+    const cardH = 88 * s.zoom;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    // Transform and sort points by Z for painter's algorithm
+    const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
+    const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
+
+    const projected = s.points.map((p, i) => {
+      // Rotate Y
+      let x = p.x * cosY - p.z * sinY;
+      let z = p.x * sinY + p.z * cosY;
+      let y = p.y;
+      // Rotate X
+      const y2 = y * cosX - z * sinX;
+      const z2 = y * sinX + z * cosX;
+      y = y2;
+      z = z2;
+
+      const scale = 1 / (1 - z * 0.4); // perspective
+      return {
+        sx: cx + x * radius * scale,
+        sy: cy + y * radius * scale,
+        z,
+        scale,
+        i,
+      };
+    });
+
+    projected.sort((a, b) => a.z - b.z);
+
+    // Draw cards
+    for (const pt of projected) {
+      const item = feedItems[pt.i];
+      const img = s.images[pt.i];
+      const alpha = Math.max(0, Math.min(1, (pt.z + 1) * 0.6 + 0.2));
+      const cw = cardW * pt.scale;
+      const ch = cardH * pt.scale;
+      const px = pt.sx - cw / 2;
+      const py = pt.sy - ch / 2;
+
+      ctx.globalAlpha = alpha;
+
+      // Draw card shadow
+      ctx.fillStyle = "rgba(0,0,0,0.4)";
+      ctx.beginPath();
+      ctx.roundRect(px + 2, py + 2, cw, ch, 4 * pt.scale);
+      ctx.fill();
+
+      // Draw card background
+      if (item.type === "placement") {
+        ctx.fillStyle = "#111";
+      } else {
+        ctx.fillStyle = "#8B7EC8"; // lilac fallback
+      }
+      ctx.beginPath();
+      ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
+      ctx.fill();
+
+      // Draw image if loaded
+      if (img) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
+        ctx.clip();
+        // Cover fit
+        const imgRatio = img.width / img.height;
+        const cardRatio = cw / ch;
+        let dw: number, dh: number, dx: number, dy: number;
+        if (imgRatio > cardRatio) {
+          dh = ch;
+          dw = ch * imgRatio;
+          dx = px - (dw - cw) / 2;
+          dy = py;
+        } else {
+          dw = cw;
+          dh = cw / imgRatio;
+          dx = px;
+          dy = py - (dh - ch) / 2;
         }
-      },
-      { threshold: 0.1, rootMargin: "200px" }
-    );
-    const el = sentinelRef.current;
-    if (el) observer.observe(el);
-    return () => { if (el) observer.unobserve(el); };
-  }, [filtered.length, visibleCount]);
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.restore();
+      }
 
-  // Reset visible count when filter changes
+      // Hover glow
+      if (s.hovered === pt.i) {
+        ctx.strokeStyle = "rgba(255,255,255,0.8)";
+        ctx.lineWidth = 2 * pt.scale;
+        ctx.beginPath();
+        ctx.roundRect(px, py, cw, ch, 4 * pt.scale);
+        ctx.stroke();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+
+    // Draw center text
+    ctx.textAlign = "center";
+    ctx.fillStyle = "rgba(255,255,255,0.08)";
+    ctx.font = `900 ${Math.min(120, w * 0.1)}px system-ui, sans-serif`;
+    ctx.fillText("PUSHER", cx, cy + Math.min(120, w * 0.1) * 0.35);
+
+    requestAnimationFrame(render);
+  }, []);
+
   useEffect(() => {
-    setVisibleCount(18);
-  }, [activeFilter]);
+    requestAnimationFrame(render);
+  }, [render]);
 
-  const visibleItems = filtered.slice(0, visibleCount);
+  // Mouse/touch handlers
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const s = stateRef.current;
+
+    const onDown = (ex: number, ey: number) => {
+      s.dragging = true;
+      s.lastX = ex;
+      s.lastY = ey;
+      s.velX = 0;
+      s.velY = 0;
+    };
+    const onMove = (ex: number, ey: number) => {
+      if (s.dragging) {
+        const dx = ex - s.lastX;
+        const dy = ey - s.lastY;
+        s.velY = dx * 0.003;
+        s.velX = dy * 0.003;
+        s.rotY += dx * 0.005;
+        s.rotX += dy * 0.005;
+        s.lastX = ex;
+        s.lastY = ey;
+      }
+
+      // Hit test for hover
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const cx = w / 2;
+      const cy = h / 2;
+      const radius = Math.min(w, h) * 0.32 * s.zoom;
+      const cardW = 70 * s.zoom;
+      const cardH = 88 * s.zoom;
+      const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX);
+      const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY);
+
+      let closest = -1;
+      let closestDist = Infinity;
+
+      for (let i = 0; i < s.points.length; i++) {
+        const p = s.points[i];
+        let x = p.x * cosY - p.z * sinY;
+        let z = p.x * sinY + p.z * cosY;
+        let y = p.y;
+        const y2 = y * cosX - z * sinX;
+        const z2 = y * sinX + z * cosX;
+        y = y2;
+        z = z2;
+        if (z < -0.2) continue; // skip back-facing
+
+        const scale = 1 / (1 - z * 0.4);
+        const sx = cx + x * radius * scale;
+        const sy = cy + y * radius * scale;
+        const cw = cardW * scale;
+        const ch = cardH * scale;
+
+        if (ex >= sx - cw / 2 && ex <= sx + cw / 2 && ey >= sy - ch / 2 && ey <= sy + ch / 2) {
+          const d = Math.abs(z);
+          if (d < closestDist) {
+            closest = i;
+            closestDist = d;
+          }
+        }
+      }
+      s.hovered = closest;
+      canvas.style.cursor = closest >= 0 ? "pointer" : "grab";
+    };
+    const onUp = () => { s.dragging = false; };
+
+    const onClick = (e: MouseEvent) => {
+      if (Math.abs(s.velX) > 0.01 || Math.abs(s.velY) > 0.01) return;
+      if (s.hovered >= 0) setSelected(s.hovered);
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      s.targetZoom = Math.max(0.4, Math.min(3, s.targetZoom - e.deltaY * 0.001));
+    };
+
+    const mouseDown = (e: MouseEvent) => onDown(e.clientX, e.clientY);
+    const mouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY);
+    const touchStart = (e: TouchEvent) => { e.preventDefault(); onDown(e.touches[0].clientX, e.touches[0].clientY); };
+    const touchMove = (e: TouchEvent) => { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); };
+
+    canvas.addEventListener("mousedown", mouseDown);
+    window.addEventListener("mousemove", mouseMove);
+    window.addEventListener("mouseup", onUp);
+    canvas.addEventListener("click", onClick);
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+    canvas.addEventListener("touchstart", touchStart, { passive: false });
+    canvas.addEventListener("touchmove", touchMove, { passive: false });
+    canvas.addEventListener("touchend", onUp);
+
+    return () => {
+      canvas.removeEventListener("mousedown", mouseDown);
+      window.removeEventListener("mousemove", mouseMove);
+      window.removeEventListener("mouseup", onUp);
+      canvas.removeEventListener("click", onClick);
+      canvas.removeEventListener("wheel", onWheel);
+      canvas.removeEventListener("touchstart", touchStart);
+      canvas.removeEventListener("touchmove", touchMove);
+      canvas.removeEventListener("touchend", onUp);
+    };
+  }, []);
 
   return (
-    <div style={{ background: "#000", color: "#fff", minHeight: "100vh" }}>
-      {/* Nav */}
-      <nav style={{
-        position: "fixed", top: 36, left: 0, right: 0, zIndex: 50,
-        background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-      }}>
+    <div style={{ background: "#000", width: "100vw", height: "100vh", overflow: "hidden", position: "relative" }}>
+      {/* Loading overlay */}
+      {loadProgress < 100 && (
         <div style={{
-          maxWidth: 1200, margin: "0 auto", padding: "14px 24px",
-          display: "flex", justifyContent: "space-between", alignItems: "center",
+          position: "absolute", inset: 0, zIndex: 100, background: "#000",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         }}>
-          <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: "-0.5px" }}>PUSHER</span>
-          <div style={{ display: "flex", gap: 28, fontSize: 12, letterSpacing: "2px", textTransform: "uppercase" }}>
-            {["Work", "Artists", "About", "Contact"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} style={{
-                color: "rgba(255,255,255,0.5)", textDecoration: "none",
-                transition: "color 0.3s",
-              }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
-              >{item}</a>
-            ))}
+          <div style={{ fontSize: 48, fontWeight: 900, color: "#fff", letterSpacing: -2, marginBottom: 24 }}>PUSHER</div>
+          <div style={{ width: 200, height: 2, background: "rgba(255,255,255,0.1)", borderRadius: 2, overflow: "hidden" }}>
+            <div style={{ width: `${loadProgress}%`, height: "100%", background: "#fff", transition: "width 0.3s" }} />
           </div>
+          <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 12, letterSpacing: 2 }}>{loadProgress}%</div>
         </div>
-      </nav>
+      )}
 
-      {/* Hero */}
-      <section style={{
-        paddingTop: 160, paddingBottom: 80, textAlign: "center",
-        position: "relative", overflow: "hidden",
-      }}>
-        <div style={{
-          position: "absolute", top: "40%", left: "50%", transform: "translate(-50%, -50%)",
-          width: 500, height: 500, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-        <h1 style={{
-          fontSize: "clamp(56px, 12vw, 140px)", fontWeight: 900,
-          lineHeight: 0.9, letterSpacing: "-4px", margin: 0,
-          background: "linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.3) 100%)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-        }}>
-          PUSHER
-        </h1>
-        <p style={{
-          fontSize: 14, letterSpacing: "4px", textTransform: "uppercase",
-          color: "rgba(255,255,255,0.4)", marginTop: 20, fontWeight: 400,
-        }}>
-          Sync Licensing &bull; Bespoke Composition &bull; Music Supervision
-        </p>
-        <p style={{
-          color: "rgba(255,255,255,0.35)", marginTop: 16, fontSize: 15,
-          maxWidth: 500, marginLeft: "auto", marginRight: "auto", lineHeight: 1.6,
-        }}>
-          Music for the world&apos;s biggest films, shows, and brands.
-          <br />Over 150 artists. 500+ placements. Since 2010.
-        </p>
-      </section>
+      {/* Canvas */}
+      <canvas
+        ref={canvasRef}
+        style={{ position: "absolute", inset: 0, cursor: "grab" }}
+      />
 
-      {/* Filter tabs */}
-      <div id="work" style={{
-        maxWidth: 1200, margin: "0 auto", padding: "0 16px 24px",
-        display: "flex", gap: 8, justifyContent: "center",
+      {/* Top nav overlay */}
+      <div style={{
+        position: "absolute", top: 36, left: 0, right: 0, zIndex: 20,
+        padding: "14px 24px",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        background: "linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%)",
+        pointerEvents: "none",
       }}>
-        {(["all", "placements", "artists"] as const).map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            style={{
-              padding: "8px 20px", borderRadius: 50, border: "none",
-              background: activeFilter === f ? "#fff" : "rgba(255,255,255,0.06)",
-              color: activeFilter === f ? "#000" : "rgba(255,255,255,0.5)",
-              fontSize: 12, fontWeight: 600, letterSpacing: "1.5px",
-              textTransform: "uppercase", cursor: "pointer",
-              transition: "all 0.3s",
-            }}
-          >
-            {f}
-          </button>
-        ))}
+        <span style={{ fontSize: 22, fontWeight: 900, color: "#fff", pointerEvents: "auto" }}>PUSHER</span>
+        <div style={{ display: "flex", gap: 24, fontSize: 12, letterSpacing: 2, textTransform: "uppercase", pointerEvents: "auto" }}>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>Sync Licensing</span>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>Bespoke Composition</span>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}>Music Supervision</span>
+        </div>
       </div>
 
-      {/* Instagram-style feed grid */}
-      <section style={{ maxWidth: 1200, margin: "0 auto", padding: "0 16px 80px" }}>
+      {/* Hint */}
+      {showHint && loadProgress >= 100 && (
         <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 3,
+          position: "absolute", bottom: 60, left: "50%", transform: "translateX(-50%)",
+          zIndex: 20, color: "rgba(255,255,255,0.4)", fontSize: 13,
+          letterSpacing: 3, textTransform: "uppercase", textAlign: "center",
+          animation: "pusher-fade 4s ease-in-out",
+          pointerEvents: "none",
         }}>
-          {visibleItems.map((item, i) => {
-            // Check if this is the start of a new year
-            const isNewYear = i === 0 || (
-              filtered[filtered.indexOf(item) - 1] &&
-              filtered[filtered.indexOf(item) - 1].year !== item.year
-            );
-            const actualIndex = filtered.indexOf(item);
-            const showYearMarker = isNewYear && actualIndex % 3 === 0;
-
-            return (
-              <div key={`${item.src}-${i}`} style={{ position: "relative" }}>
-                {/* Year marker overlay for first item of each year */}
-                {isNewYear && (
-                  <div style={{
-                    position: "absolute", top: 8, left: 8, zIndex: 10,
-                    background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
-                    padding: "4px 10px", borderRadius: 4,
-                    fontSize: 11, fontWeight: 700, letterSpacing: "1px",
-                    color: "rgba(255,255,255,0.8)",
-                  }}>
-                    {item.year}
-                  </div>
-                )}
-                <div style={{
-                  aspectRatio: "4/5", position: "relative", overflow: "hidden",
-                  cursor: "pointer", transition: "opacity 0.3s",
-                }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.label}
-                    fill
-                    sizes="(max-width: 768px) 33vw, 400px"
-                    style={{ objectFit: "cover" }}
-                    unoptimized
-                  />
-                </div>
-              </div>
-            );
-          })}
+          Drag to explore &bull; Scroll to zoom &bull; Click to view
         </div>
+      )}
 
-        {/* Load more sentinel */}
-        {visibleCount < filtered.length && (
-          <div ref={sentinelRef} style={{ textAlign: "center", padding: "48px 0" }}>
-            <div style={{
-              width: 20, height: 20,
-              border: "2px solid rgba(255,255,255,0.2)",
-              borderTopColor: "#fff",
-              borderRadius: "50%",
-              margin: "0 auto",
-              animation: "pusher-spin 0.8s linear infinite",
-            }} />
-            <style>{`@keyframes pusher-spin { to { transform: rotate(360deg); } }`}</style>
-          </div>
-        )}
-
-        {visibleCount >= filtered.length && (
-          <p style={{
-            textAlign: "center", padding: "48px 0",
-            color: "rgba(255,255,255,0.2)", fontSize: 13,
-            letterSpacing: "3px", textTransform: "uppercase",
-          }}>
-            Est. 2010
-          </p>
-        )}
-      </section>
-
-      {/* About section */}
-      <section id="about" style={{
-        padding: "80px 24px",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
+      {/* Stats bottom-left */}
+      <div style={{
+        position: "absolute", bottom: 24, left: 24, zIndex: 20,
+        color: "rgba(255,255,255,0.25)", fontSize: 11, letterSpacing: 2,
+        textTransform: "uppercase", pointerEvents: "none",
       }}>
-        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-1px", marginBottom: 20 }}>
-            A modern hydra of music
-          </h2>
-          <p style={{ color: "rgba(255,255,255,0.45)", lineHeight: 1.8, fontSize: 15 }}>
-            Founded in 2009, Pusher has grown from Los Angeles into a global creative
-            force — with offices in LA, New York, London, and Berlin. We represent over
-            150 artists and have placed music in some of the most iconic trailers and
-            campaigns of the last 15 years — from Inception to Oppenheimer, Blade Runner
-            2049 to Wicked. Our mission: connect extraordinary music with extraordinary moments.
-          </p>
+        196 Placements &bull; 150+ Artists &bull; Since 2010
+      </div>
+
+      {/* Selected card modal */}
+      {selected !== null && (
+        <div
+          style={{
+            position: "absolute", inset: 0, zIndex: 50,
+            background: "rgba(0,0,0,0.85)", backdropFilter: "blur(20px)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => setSelected(null)}
+        >
           <div style={{
-            marginTop: 40, display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap",
-          }}>
-            {["Los Angeles", "New York", "London", "Berlin"].map((city) => (
-              <span key={city} style={{
-                padding: "8px 18px", borderRadius: 50,
-                border: "1px solid rgba(255,255,255,0.1)",
-                fontSize: 12, letterSpacing: "2px", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.4)",
-              }}>
-                {city}
-              </span>
-            ))}
+            maxWidth: 400, width: "90%", textAlign: "center",
+          }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{
+              aspectRatio: "4/5", borderRadius: 12, overflow: "hidden",
+              boxShadow: "0 0 80px rgba(255,255,255,0.1)",
+              marginBottom: 24,
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={feedItems[selected].src}
+                alt={feedItems[selected].label}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+            <div style={{ color: "#fff", fontSize: 20, fontWeight: 700 }}>
+              {feedItems[selected].label}
+            </div>
+            <div style={{
+              color: "rgba(255,255,255,0.4)", fontSize: 12,
+              marginTop: 6, letterSpacing: 2, textTransform: "uppercase",
+            }}>
+              {feedItems[selected].type === "placement" ? "Placement" : "Artist / Composer"} &bull; {feedItems[selected].year}
+            </div>
+            <button
+              onClick={() => setSelected(null)}
+              style={{
+                marginTop: 24, padding: "10px 28px",
+                background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+                color: "#fff", borderRadius: 50, fontSize: 12,
+                cursor: "pointer", letterSpacing: 2, textTransform: "uppercase",
+              }}
+            >
+              Close
+            </button>
           </div>
         </div>
-      </section>
+      )}
 
-      {/* Contact */}
-      <section id="contact" style={{
-        padding: "80px 24px",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-      }}>
-        <div style={{ maxWidth: 500, margin: "0 auto", textAlign: "center" }}>
-          <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 12 }}>
-            Get in touch
-          </h2>
-          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>
-            Have a project? We&apos;d love to hear about it.
-          </p>
-          <form onSubmit={(e) => e.preventDefault()} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              <input placeholder="Name" style={{
-                padding: "12px 16px", borderRadius: 6,
-                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                color: "#fff", fontSize: 14, outline: "none",
-              }} />
-              <input placeholder="Email" style={{
-                padding: "12px 16px", borderRadius: 6,
-                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                color: "#fff", fontSize: 14, outline: "none",
-              }} />
-            </div>
-            <textarea placeholder="Tell us about your project..." rows={3} style={{
-              padding: "12px 16px", borderRadius: 6,
-              background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-              color: "#fff", fontSize: 14, outline: "none", resize: "vertical",
-            }} />
-            <button type="submit" style={{
-              padding: "14px", background: "#fff", color: "#000",
-              borderRadius: 6, fontWeight: 700, fontSize: 13,
-              border: "none", cursor: "pointer", letterSpacing: "1px",
-              textTransform: "uppercase",
-            }}>
-              Send
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        padding: "32px 24px", textAlign: "center",
-      }}>
-        <span style={{ fontSize: 14, fontWeight: 900 }}>PUSHER</span>
-        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 12, marginTop: 8 }}>
-          &copy; 2024 Pusher Music Group. All rights reserved.
-        </p>
-      </footer>
+      <style>{`
+        @keyframes pusher-fade {
+          0% { opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
