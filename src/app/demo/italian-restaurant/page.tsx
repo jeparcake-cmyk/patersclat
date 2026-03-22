@@ -189,6 +189,11 @@ export default function ItalianRestaurantPage() {
 
       {/* Hero */}
       <section className="gf-hero py-24 md:py-36">
+        <img
+          src="/images/restaurant-interior.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+        />
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
           <div className="gf-sans text-xs uppercase tracking-[0.3em] mb-6" style={{ color: 'var(--gf-gold)' }}>
             Authentic Italian Dining
@@ -218,19 +223,22 @@ export default function ItalianRestaurantPage() {
       <section className="py-0">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
           {[
-            { bg: 'linear-gradient(135deg, #8B4513, #D2691E)', label: 'Fresh Pasta' },
-            { bg: 'linear-gradient(135deg, #CD853F, #DEB887)', label: 'Wood-Fired Pizza' },
-            { bg: 'linear-gradient(135deg, #722F37, #8B0000)', label: 'Fine Wines' },
-            { bg: 'linear-gradient(135deg, #2C1810, #4A3728)', label: 'Warm Ambiance' },
+            { img: '/images/restaurant-pasta.jpg', label: 'Fresh Pasta' },
+            { img: '/images/restaurant-pizza.jpg', label: 'Wood-Fired Pizza' },
+            { img: '/images/restaurant-wine.jpg', label: 'Fine Wines' },
+            { img: '/images/restaurant-interior.jpg', label: 'Warm Ambiance' },
           ].map((item) => (
             <div
               key={item.label}
-              className="h-48 md:h-64 flex items-end justify-center pb-6"
-              style={{ background: item.bg }}
+              className="h-48 md:h-64 relative overflow-hidden"
             >
-              <span className="gf-sans text-white text-xs uppercase tracking-[0.2em] bg-black/30 px-4 py-2 rounded-full">
-                {item.label}
-              </span>
+              <img src={item.img} alt={item.label} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/30" />
+              <div className="absolute inset-0 flex items-end justify-center pb-6">
+                <span className="gf-sans text-white text-xs uppercase tracking-[0.2em] bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                  {item.label}
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -319,21 +327,24 @@ export default function ItalianRestaurantPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
-              { bg: 'linear-gradient(135deg, #3E2723, #5D4037)', h: 'h-48 md:h-64', label: 'Interior' },
-              { bg: 'linear-gradient(135deg, #BF360C, #E64A19)', h: 'h-48 md:h-64', label: 'Wood-Fired Oven' },
-              { bg: 'linear-gradient(135deg, #4E342E, #795548)', h: 'h-48 md:h-64', label: 'Bar Area' },
-              { bg: 'linear-gradient(135deg, #F9A825, #FFD54F)', h: 'h-48 md:h-64', label: 'Fresh Pasta' },
-              { bg: 'linear-gradient(135deg, #1B5E20, #388E3C)', h: 'h-48 md:h-64', label: 'Garden Terrace' },
-              { bg: 'linear-gradient(135deg, #880E4F, #AD1457)', h: 'h-48 md:h-64', label: 'Private Dining' },
+              { img: '/images/restaurant-interior.jpg', label: 'Interior' },
+              { img: '/images/restaurant-chef.jpg', label: 'Our Chef' },
+              { img: '/images/restaurant-wine.jpg', label: 'Wine Selection' },
+              { img: '/images/restaurant-pasta.jpg', label: 'Fresh Pasta' },
+              { img: '/images/restaurant-table.jpg', label: 'Table Setting' },
+              { img: '/images/restaurant-tiramisu.jpg', label: 'Desserts' },
             ].map((item) => (
               <div
                 key={item.label}
-                className={`${item.h} rounded-lg flex items-end justify-center pb-4`}
-                style={{ background: item.bg }}
+                className="h-48 md:h-64 rounded-lg overflow-hidden relative group"
               >
-                <span className="gf-sans text-white text-xs bg-black/40 px-3 py-1 rounded-full">
-                  {item.label}
-                </span>
+                <img src={item.img} alt={item.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+                <div className="absolute inset-0 flex items-end justify-center pb-4">
+                  <span className="gf-sans text-white text-xs bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm">
+                    {item.label}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
