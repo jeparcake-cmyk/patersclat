@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact | Patersclat",
-  description: "Get in touch with Patersclat. Tell us about your project and we'll get back to you within 24 hours.",
+  title: "Contact | slap.",
+  description: "Get in touch with slap. Tell us about your project and we'll get back to you within 24 hours.",
 };
 
 export default function ContactPage() {
@@ -39,7 +39,7 @@ export default function ContactPage() {
                 className="space-y-4"
               >
                 {/* FormSubmit config */}
-                <input type="hidden" name="_subject" value="New enquiry from Patersclat website" />
+                <input type="hidden" name="_subject" value="New enquiry from slap. website" />
                 <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_template" value="table" />
                 <input type="hidden" name="_next" value="https://patersclat.vercel.app/contact?sent=true" />

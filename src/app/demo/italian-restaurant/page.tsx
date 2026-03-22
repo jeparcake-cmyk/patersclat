@@ -480,7 +480,7 @@ export default function ItalianRestaurantPage() {
         <p className="text-xs mt-2 opacity-60">
           Demo site built by{" "}
           <Link href="/" className="underline hover:text-white">
-            Patersclat
+            slap.
           </Link>
         </p>
       </footer>

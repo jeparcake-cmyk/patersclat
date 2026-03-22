@@ -17,7 +17,7 @@ export default function DemoLayout({
       <div className="fixed top-0 left-0 right-0 z-[100] bg-accent text-white text-center py-2 text-sm font-medium">
         This is a demo site built by{" "}
         <Link href="/" className="underline font-bold">
-          Patersclat
+          slap.
         </Link>{" "}
         &mdash;{" "}
         <Link href="/contact" className="underline">

@@ -22,7 +22,7 @@ export default function Nav() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold gradient-text tracking-tight">
-          patersclat
+          slap.
         </Link>
 
         {/* Desktop nav */}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Pricing | Patersclat",
+  title: "Pricing | slap.",
   description: "Transparent, affordable pricing for small business websites. No hidden fees, no surprises.",
 };
 

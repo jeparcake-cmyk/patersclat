@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About | Patersclat",
-  description: "Meet Jake and Tom - the team behind Patersclat. We build websites for small businesses that actually deliver results.",
+  title: "About | slap.",
+  description: "Meet Jake and Tom - the team behind slap.. We build websites for small businesses that actually deliver results.",
 };
 
 export default function AboutPage() {
@@ -22,7 +22,7 @@ export default function AboutPage() {
             <span className="gradient-text">websites that work</span>
           </h1>
           <p className="mt-6 text-muted text-lg max-w-2xl mx-auto">
-            We started Patersclat because we saw too many small businesses getting
+            We started slap. because we saw too many small businesses getting
             ripped off by agencies charging thousands for mediocre websites. We knew
             we could do better - and charge less.
           </p>

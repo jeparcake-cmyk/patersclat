@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Patersclat | Web Design & Development for Small Business",
+  title: "slap. | Web Design & Development for Small Business",
   description:
     "We build stunning, high-performance websites for small businesses. Custom design, development, and ongoing support from a team that cares.",
 };

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Reviews | Patersclat",
-  description: "See what our clients say about working with Patersclat. Real testimonials from small businesses we've helped.",
+  title: "Reviews | slap.",
+  description: "See what our clients say about working with slap.. Real testimonials from small businesses we've helped.",
 };
 
 const reviews = [
@@ -22,7 +22,7 @@ const reviews = [
   {
     name: "Emma Thompson",
     business: "Bloom Floral Design",
-    text: "Our bookings have doubled since the new site went live. The design is gorgeous and our customers always comment on how easy it is to use. Highly recommend Patersclat to any small business looking to get online.",
+    text: "Our bookings have doubled since the new site went live. The design is gorgeous and our customers always comment on how easy it is to use. Highly recommend slap. to any small business looking to get online.",
     stars: 5,
   },
   {
@@ -40,7 +40,7 @@ const reviews = [
   {
     name: "James Hartley",
     business: "Hartley & Sons Roofing",
-    text: "We needed a website that showed off our work and made it easy for customers to request quotes. Patersclat nailed it. Professional, fast, and great value. We've already recommended them to other tradespeople.",
+    text: "We needed a website that showed off our work and made it easy for customers to request quotes. slap. nailed it. Professional, fast, and great value. We've already recommended them to other tradespeople.",
     stars: 5,
   },
 ];
