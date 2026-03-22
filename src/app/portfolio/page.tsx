@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Our Work | slap.",
   description:
-    "Browse our portfolio of websites built for small businesses. See real examples of what we can create for you.",
+    "Browse demo websites we've designed for different industries. See what we could build for your business.",
 };
 
 const projects = [
@@ -57,13 +57,12 @@ export default function PortfolioPage() {
             Our Work
           </span>
           <h1 className="mt-4 text-5xl sm:text-6xl font-bold tracking-tight">
-            Websites that
+            What we
             <br />
-            <span className="gradient-text">win customers</span>
+            <span className="gradient-text">can build for you</span>
           </h1>
           <p className="mt-6 text-muted text-lg max-w-2xl mx-auto">
-            Every site we build is designed to look great, load fast, and convert
-            visitors into paying customers. Browse our portfolio below.
+            These are demo sites we&apos;ve designed to showcase what&apos;s possible. Each one is a fully working example built for a different industry — imagine what we could create for your business.
           </p>
         </div>
       </section>

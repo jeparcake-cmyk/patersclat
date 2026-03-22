@@ -127,9 +127,6 @@ export default function Home() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
                     <div className="w-3 h-3 rounded-full bg-green-500/70" />
                   </div>
-                  <div className="flex-1 text-center">
-                    <span className="text-xs text-muted bg-surface px-4 py-1 rounded-md">thamesplumbing.co.uk</span>
-                  </div>
                 </div>
                 <img
                   src="/images/hero-workspace.jpg"
@@ -168,12 +165,12 @@ export default function Home() {
               Our Work
             </span>
             <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight">
-              Sites we&apos;ve built
+              What your site
               <br />
-              <span className="gradient-text">for real businesses</span>
+              <span className="gradient-text">could look like</span>
             </h2>
             <p className="mt-4 text-muted text-lg max-w-2xl mx-auto">
-              Every site is custom designed and built from scratch. No templates, no shortcuts.
+              These are demo sites we&apos;ve built to show what&apos;s possible. Each one is a fully designed example — imagine what we could create for your business.
             </p>
           </div>
 
