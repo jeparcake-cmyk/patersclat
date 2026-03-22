@@ -23,28 +23,32 @@ const portfolio = [
     title: "Thames Plumbing Co.",
     category: "Local Tradesperson",
     href: "/demo/london-plumber",
-    color: "from-blue-600 to-blue-900",
+    color: "from-blue-600/90 to-blue-900/90",
+    image: "/images/coding.jpg",
     description: "Emergency plumber website with online booking and trust signals.",
   },
   {
     title: "The Golden Fork",
     category: "Restaurant",
     href: "/demo/italian-restaurant",
-    color: "from-amber-800 to-yellow-900",
+    color: "from-amber-800/90 to-yellow-900/90",
+    image: "/images/meeting.jpg",
     description: "Elegant restaurant site with menu, gallery, and reservations.",
   },
   {
     title: "Alex Carter Fitness",
     category: "Personal Trainer",
     href: "/demo/personal-trainer",
-    color: "from-lime-500 to-green-900",
+    color: "from-lime-600/90 to-green-900/90",
+    image: "/images/launch.jpg",
     description: "Bold PT website with results showcase and booking system.",
   },
   {
     title: "Pusher Music",
     category: "Music Sync Agency",
     href: "/demo/pusher-music",
-    color: "from-emerald-500 to-gray-900",
+    color: "from-emerald-600/90 to-gray-900/90",
+    image: "/images/design-process.jpg",
     description: "Interactive 3D globe showcasing music placements and artists.",
   },
 ];
@@ -113,7 +117,7 @@ export default function Home() {
           </div>
 
           {/* Right: Hero image */}
-          <div className="hidden lg:block animate-fade-in-up-delay-2">
+          <div className="mt-12 lg:mt-0 animate-fade-in-up-delay-2">
             <div className="relative">
               {/* Laptop frame */}
               <div className="rounded-xl overflow-hidden shadow-2xl shadow-accent/10 border border-border/50">
@@ -180,8 +184,15 @@ export default function Home() {
                 href={project.href}
                 className="group relative rounded-2xl overflow-hidden gradient-border"
               >
-                {/* Gradient background */}
-                <div className={`bg-gradient-to-br ${project.color} p-8 pb-12 min-h-[260px] flex flex-col justify-end transition-transform duration-500 group-hover:scale-[1.02]`}>
+                {/* Background image + gradient overlay */}
+                <div className="relative min-h-[260px] flex flex-col justify-end transition-transform duration-500 group-hover:scale-[1.02]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${project.color}`} />
+                  <div className="relative z-10 p-8 pb-12">
                   {/* Category badge */}
                   <span className="inline-block w-fit px-3 py-1 rounded-full bg-white/15 text-white/80 text-xs font-medium mb-4 backdrop-blur-sm">
                     {project.category}
@@ -189,8 +200,9 @@ export default function Home() {
                   <h3 className="text-2xl font-bold text-white">{project.title}</h3>
                   <p className="text-white/70 mt-2 text-sm">{project.description}</p>
 
+                  </div>
                   {/* Arrow */}
-                  <div className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                  <div className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                     <svg className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
