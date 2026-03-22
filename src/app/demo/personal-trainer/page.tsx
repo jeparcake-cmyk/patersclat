@@ -13,24 +13,28 @@ const services = [
     title: "1-to-1 Personal Training",
     desc: "Fully personalised sessions tailored to your goals. Whether it's fat loss, muscle building, or getting competition-ready.",
     price: "From £55/session",
+    image: "/images/fitness-weights.jpg",
   },
   {
     icon: "👥",
     title: "Small Group Training",
     desc: "Train with 2-4 people for accountability and motivation. All the benefits of PT at a fraction of the cost.",
     price: "From £25/person",
+    image: "/images/fitness-stretching.jpg",
   },
   {
     icon: "📱",
     title: "Online Coaching",
     desc: "Custom training and nutrition plans delivered via app. Weekly check-ins, form reviews, and 24/7 support.",
     price: "From £149/month",
+    image: "/images/fitness-running.jpg",
   },
   {
     icon: "🥗",
     title: "Nutrition Planning",
     desc: "Structured meal plans that fit your lifestyle. No crash diets — sustainable nutrition that gets real results.",
     price: "From £99/plan",
+    image: "/images/fitness-nutrition.jpg",
   },
 ];
 
@@ -243,6 +247,11 @@ export default function PersonalTrainerPage() {
 
       {/* Hero */}
       <section className="ac-hero py-24 md:py-32">
+        <img
+          src="/images/fitness-hero.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-15"
+        />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="max-w-2xl">
             <div className="text-xs font-bold uppercase tracking-[0.3em] mb-6" style={{ color: 'var(--ac-lime)' }}>
@@ -290,11 +299,12 @@ export default function PersonalTrainerPage() {
       <section className="py-20" style={{ background: 'var(--ac-dark)' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="rounded-2xl h-80 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1a1a1a, #2a2a2a)', border: '1px solid var(--ac-border)' }}>
-              <div className="text-center">
-                <div className="text-6xl mb-3">🏋️</div>
-                <span className="text-xs uppercase tracking-[0.2em]" style={{ color: 'var(--ac-gray)' }}>Alex Carter</span>
-              </div>
+            <div className="rounded-2xl h-80 overflow-hidden" style={{ border: '1px solid var(--ac-border)' }}>
+              <img
+                src="/images/fitness-training.jpg"
+                alt="Personal training session"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <div className="text-xs font-bold uppercase tracking-[0.3em] mb-4" style={{ color: 'var(--ac-lime)' }}>
@@ -337,13 +347,17 @@ export default function PersonalTrainerPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {services.map((service) => (
-              <div key={service.title} className="ac-card">
-                <div className="text-3xl mb-4">{service.icon}</div>
-                <h3 className="text-lg font-bold mb-2">{service.title}</h3>
-                <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--ac-gray-light)' }}>
-                  {service.desc}
-                </p>
-                <div className="text-sm font-bold" style={{ color: 'var(--ac-lime)' }}>{service.price}</div>
+              <div key={service.title} className="ac-card" style={{ padding: 0, overflow: 'hidden' }}>
+                <div className="h-40 overflow-hidden">
+                  <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold mb-2">{service.title}</h3>
+                  <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--ac-gray-light)' }}>
+                    {service.desc}
+                  </p>
+                  <div className="text-sm font-bold" style={{ color: 'var(--ac-lime)' }}>{service.price}</div>
+                </div>
               </div>
             ))}
           </div>
