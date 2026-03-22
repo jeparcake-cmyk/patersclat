@@ -272,6 +272,12 @@ export default function LondonPlumberPage() {
 
       {/* Hero */}
       <section className="plumber-hero py-20 md:py-28">
+        {/* Hero background image */}
+        <img
+          src="/images/plumber-hero.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-15"
+        />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
@@ -383,8 +389,39 @@ export default function LondonPlumberPage() {
         </div>
       </section>
 
-      {/* Why choose us */}
+      {/* Work gallery */}
       <section className="py-20" style={{ background: 'var(--plumber-surface)' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <span className="text-sm font-bold uppercase tracking-widest" style={{ color: 'var(--plumber-blue-light)' }}>
+              Our Work
+            </span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold">
+              Quality you can see
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="rounded-xl overflow-hidden md:col-span-2 md:row-span-2">
+              <img src="/images/plumber-bathroom.jpg" alt="Bathroom installation" className="w-full h-full object-cover" />
+            </div>
+            <div className="rounded-xl overflow-hidden">
+              <img src="/images/plumber-kitchen.jpg" alt="Kitchen plumbing" className="w-full h-48 object-cover" />
+            </div>
+            <div className="rounded-xl overflow-hidden">
+              <img src="/images/plumber-boiler.jpg" alt="Boiler installation" className="w-full h-48 object-cover" />
+            </div>
+            <div className="rounded-xl overflow-hidden">
+              <img src="/images/plumber-pipes.jpg" alt="Pipe work" className="w-full h-48 object-cover" />
+            </div>
+            <div className="rounded-xl overflow-hidden">
+              <img src="/images/plumber-tools.jpg" alt="Professional tools" className="w-full h-48 object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why choose us */}
+      <section className="py-20" style={{ background: 'var(--plumber-bg)' }}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-14 items-center">
             <div>
@@ -416,25 +453,38 @@ export default function LondonPlumberPage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl p-10 text-center" style={{ background: 'linear-gradient(135deg, var(--plumber-blue-dark), var(--plumber-blue))' }}>
-              <div className="text-6xl font-bold text-white">15+</div>
-              <div className="text-blue-200 mt-2 text-lg">Years Experience</div>
-              <div className="mt-8 grid grid-cols-2 gap-6">
-                <div>
-                  <div className="text-3xl font-bold text-white">5,000+</div>
-                  <div className="text-blue-300 text-sm mt-1">Jobs Completed</div>
+            <div className="space-y-6">
+              {/* Main plumber image */}
+              <div className="rounded-2xl overflow-hidden">
+                <img
+                  src="/images/plumber-bathroom.jpg"
+                  alt="Modern bathroom installation"
+                  className="w-full h-64 md:h-80 object-cover"
+                />
+              </div>
+              {/* Stats row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-xl overflow-hidden relative">
+                  <img
+                    src="/images/plumber-kitchen.jpg"
+                    alt="Kitchen plumbing"
+                    className="w-full h-36 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-blue-900/70 flex flex-col items-center justify-center text-white">
+                    <div className="text-3xl font-bold">15+</div>
+                    <div className="text-blue-200 text-xs mt-1">Years Experience</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-white">4.9★</div>
-                  <div className="text-blue-300 text-sm mt-1">Avg Rating</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white">30 min</div>
-                  <div className="text-blue-300 text-sm mt-1">Avg Response</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-white">100%</div>
-                  <div className="text-blue-300 text-sm mt-1">Satisfaction</div>
+                <div className="rounded-xl overflow-hidden relative">
+                  <img
+                    src="/images/plumber-pipes.jpg"
+                    alt="Pipe work"
+                    className="w-full h-36 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-blue-900/70 flex flex-col items-center justify-center text-white">
+                    <div className="text-3xl font-bold">5,000+</div>
+                    <div className="text-blue-200 text-xs mt-1">Jobs Completed</div>
+                  </div>
                 </div>
               </div>
             </div>

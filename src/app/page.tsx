@@ -24,7 +24,7 @@ const portfolio = [
     category: "Local Tradesperson",
     href: "/demo/london-plumber",
     color: "from-blue-600/90 to-blue-900/90",
-    image: "/images/coding.jpg",
+    image: "/images/plumber.jpg",
     description: "Emergency plumber website with online booking and trust signals.",
   },
   {
@@ -32,7 +32,7 @@ const portfolio = [
     category: "Restaurant",
     href: "/demo/italian-restaurant",
     color: "from-amber-800/90 to-yellow-900/90",
-    image: "/images/meeting.jpg",
+    image: "/images/restaurant.jpg",
     description: "Elegant restaurant site with menu, gallery, and reservations.",
   },
   {
@@ -40,7 +40,7 @@ const portfolio = [
     category: "Personal Trainer",
     href: "/demo/personal-trainer",
     color: "from-lime-600/90 to-green-900/90",
-    image: "/images/launch.jpg",
+    image: "/images/gym.jpg",
     description: "Bold PT website with results showcase and booking system.",
   },
   {
@@ -48,7 +48,7 @@ const portfolio = [
     category: "Music Sync Agency",
     href: "/demo/pusher-music",
     color: "from-emerald-600/90 to-gray-900/90",
-    image: "/images/design-process.jpg",
+    image: "/images/music-studio.jpg",
     description: "Interactive 3D globe showcasing music placements and artists.",
   },
 ];
