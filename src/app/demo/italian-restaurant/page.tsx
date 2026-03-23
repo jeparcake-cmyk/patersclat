@@ -411,7 +411,7 @@ export default function ItalianRestaurantPage() {
               <div className="grid sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--gf-gold)' }}>Date</label>
-                  <input type="date" className="w-full px-4 py-3 rounded text-sm bg-white/10 border border-white/10 text-white outline-none focus:border-white/30" />
+                  <input type="date" className="w-full px-4 py-3 rounded text-sm bg-white/10 border border-white/10 text-white outline-none focus:border-white/30" style={{ height: 46, appearance: 'none', WebkitAppearance: 'none' }} />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--gf-gold)' }}>Time</label>
