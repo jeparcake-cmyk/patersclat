@@ -34,7 +34,7 @@ export default function ContactPage() {
             {/* Form */}
             <div className="md:col-span-3">
               <form
-                action="https://formsubmit.co/jakepatercake@gmail.com"
+                action="https://formsubmit.co/hello@slap.ltd"
                 method="POST"
                 className="space-y-4"
               >
@@ -172,10 +172,10 @@ export default function ContactPage() {
                   <p>
                     <span className="font-medium text-foreground">Email:</span>{" "}
                     <a
-                      href="mailto:jakepatercake@gmail.com"
+                      href="mailto:hello@slap.ltd"
                       className="text-accent-light hover:text-accent transition-colors"
                     >
-                      jakepatercake@gmail.com
+                      hello@slap.ltd
                     </a>
                   </p>
                 </div>
