@@ -398,7 +398,7 @@ export default function ItalianRestaurantPage() {
 
           <div className="max-w-lg mx-auto rounded-lg p-8" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
             <div className="space-y-4 gf-sans">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--gf-gold)' }}>Name</label>
                   <input type="text" placeholder="Your name" className="w-full px-4 py-3 rounded text-sm bg-white/10 border border-white/10 text-white placeholder:text-white/30 outline-none focus:border-white/30" />
@@ -408,7 +408,7 @@ export default function ItalianRestaurantPage() {
                   <input type="tel" placeholder="Phone number" className="w-full px-4 py-3 rounded text-sm bg-white/10 border border-white/10 text-white placeholder:text-white/30 outline-none focus:border-white/30" />
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--gf-gold)' }}>Date</label>
                   <input type="date" className="w-full px-4 py-3 rounded text-sm bg-white/10 border border-white/10 text-white outline-none focus:border-white/30" />
