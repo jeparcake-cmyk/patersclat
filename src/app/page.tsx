@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRef, useState, useCallback } from "react";
 
 const featuredServices = [
   {
@@ -53,6 +56,159 @@ const portfolio = [
   },
 ];
 
+
+function BeforeAfterSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [sliderPos, setSliderPos] = useState(50);
+  const dragging = useRef(false);
+
+  const handleMove = useCallback((clientX: number) => {
+    if (!dragging.current || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    setSliderPos(Math.max(5, Math.min(95, x)));
+  }, []);
+
+  const handleMouseDown = () => { dragging.current = true; };
+  const handleMouseUp = () => { dragging.current = false; };
+
+  return (
+    <section className="py-24 bg-surface/50">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <span className="text-accent-light text-sm font-mono uppercase tracking-widest">
+            The Difference
+          </span>
+          <h2 className="mt-4 text-4xl sm:text-5xl font-bold tracking-tight">
+            DIY website vs
+            <br />
+            <span className="gradient-text">built by slap.</span>
+          </h2>
+          <p className="mt-4 text-muted text-lg max-w-2xl mx-auto">
+            Drag the slider to see what a professional website can do for your business.
+          </p>
+        </div>
+
+        <div
+          ref={containerRef}
+          className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-accent/5 select-none cursor-col-resize"
+          style={{ aspectRatio: "16/10" }}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onMouseMove={(e) => handleMove(e.clientX)}
+          onTouchStart={handleMouseDown}
+          onTouchEnd={handleMouseUp}
+          onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+        >
+          {/* AFTER (full width, sits behind) */}
+          <div className="absolute inset-0">
+            <div style={{ background: "#0f172a", width: "100%", height: "100%", fontFamily: "system-ui, sans-serif", overflow: "hidden" }}>
+              {/* Modern nav */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 32px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                <span style={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>FreshBakes</span>
+                <div style={{ display: "flex", gap: 20, fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
+                  <span>Menu</span><span>About</span><span>Order</span>
+                </div>
+                <span style={{ background: "#6366f1", color: "#fff", fontSize: 12, fontWeight: 600, padding: "8px 18px", borderRadius: 20 }}>Order Now</span>
+              </div>
+              {/* Hero */}
+              <div style={{ display: "flex", height: "calc(100% - 53px)" }}>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 40px" }}>
+                  <div style={{ fontSize: 11, color: "#6366f1", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12, fontWeight: 600 }}>Artisan Bakery • Est. 2019</div>
+                  <div style={{ fontSize: "clamp(22px, 3.5vw, 42px)", fontWeight: 800, color: "#fff", lineHeight: 1.1, marginBottom: 16 }}>
+                    Freshly baked,<br /><span style={{ color: "#6366f1" }}>delivered daily.</span>
+                  </div>
+                  <div style={{ fontSize: "clamp(12px, 1.4vw, 15px)", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, maxWidth: 380, marginBottom: 24 }}>
+                    Handcrafted sourdough, pastries and cakes made with locally sourced ingredients every morning.
+                  </div>
+                  <div style={{ display: "flex", gap: 12 }}>
+                    <span style={{ background: "#6366f1", color: "#fff", fontSize: "clamp(11px, 1.2vw, 14px)", fontWeight: 600, padding: "10px 24px", borderRadius: 24 }}>View Menu</span>
+                    <span style={{ border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "clamp(11px, 1.2vw, 14px)", fontWeight: 600, padding: "10px 24px", borderRadius: 24 }}>Our Story</span>
+                  </div>
+                  <div style={{ display: "flex", gap: 24, marginTop: 28, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
+                    <span>★★★★★ 4.9 on Google</span>
+                    <span>Free delivery over £20</span>
+                  </div>
+                </div>
+                <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+                  <img src="/images/restaurant-pasta.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.7 }} />
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #0f172a 0%, transparent 40%)" }} />
+                </div>
+              </div>
+            </div>
+            {/* AFTER label */}
+            <div style={{ position: "absolute", bottom: 16, right: 16, background: "#6366f1", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 8, letterSpacing: 1 }}>
+              AFTER
+            </div>
+          </div>
+
+          {/* BEFORE (clipped by slider) */}
+          <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}>
+            <div style={{ background: "#ffffff", width: "100%", height: "100%", fontFamily: "Times New Roman, serif", overflow: "hidden" }}>
+              {/* Ugly nav */}
+              <div style={{ background: "#2e4a1e", padding: "8px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ color: "#ffff00", fontWeight: "bold", fontSize: 20, fontFamily: "Comic Sans MS, cursive" }}>🍞 FreshBakes 🍞</span>
+                <div style={{ display: "flex", gap: 16, fontSize: 14, color: "#fff", textDecoration: "underline" }}>
+                  <span>Home</span><span>Menu</span><span>Contact Us!!</span>
+                </div>
+              </div>
+              {/* Ugly marquee-style banner */}
+              <div style={{ background: "#ff0000", color: "#ffff00", textAlign: "center", padding: "6px", fontSize: 13, fontWeight: "bold", fontFamily: "Comic Sans MS, cursive" }}>
+                ⭐ BEST BREAD IN TOWN!!! CALL NOW 020 7946 0958 ⭐ OPEN 7 DAYS!! ⭐
+              </div>
+              {/* Ugly hero */}
+              <div style={{ padding: "30px 20px", textAlign: "center" }}>
+                <div style={{ fontSize: "clamp(24px, 4vw, 48px)", color: "#2e4a1e", fontFamily: "Comic Sans MS, cursive", fontWeight: "bold", textShadow: "2px 2px #ccc" }}>
+                  Welcome to FreshBakes!!
+                </div>
+                <div style={{ fontSize: "clamp(12px, 1.5vw, 16px)", color: "#666", marginTop: 8, fontStyle: "italic" }}>
+                  We sell bread and cakes and stuff. We are really good at it. Please buy from us. Thanks!!
+                </div>
+                <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 12 }}>
+                  <span style={{ background: "#2e4a1e", color: "#ffff00", fontSize: "clamp(11px, 1.3vw, 15px)", padding: "10px 20px", fontFamily: "Comic Sans MS, cursive", fontWeight: "bold", border: "3px outset #666" }}>CLICK HERE!!</span>
+                  <span style={{ background: "#ff6600", color: "#fff", fontSize: "clamp(11px, 1.3vw, 15px)", padding: "10px 20px", fontFamily: "Comic Sans MS, cursive", fontWeight: "bold", border: "3px outset #666" }}>ORDER NOW!!!</span>
+                </div>
+                <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 8 }}>
+                  <div style={{ width: "30%", height: "clamp(80px, 12vw, 140px)", background: "#f0e68c", border: "3px solid #2e4a1e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(10px, 1.2vw, 14px)", color: "#666" }}>📷 bread.jpg</div>
+                  <div style={{ width: "30%", height: "clamp(80px, 12vw, 140px)", background: "#f0e68c", border: "3px solid #2e4a1e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(10px, 1.2vw, 14px)", color: "#666" }}>📷 cake.jpg</div>
+                  <div style={{ width: "30%", height: "clamp(80px, 12vw, 140px)", background: "#f0e68c", border: "3px solid #2e4a1e", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(10px, 1.2vw, 14px)", color: "#666" }}>📷 shop.jpg</div>
+                </div>
+                <div style={{ marginTop: 16, padding: "10px", border: "2px dashed #ff0000", display: "inline-block" }}>
+                  <div style={{ fontSize: "clamp(10px, 1.2vw, 14px)", color: "#ff0000", fontWeight: "bold", fontFamily: "Comic Sans MS, cursive" }}>⚠️ Website under construction!! ⚠️</div>
+                  <div style={{ fontSize: "clamp(9px, 1vw, 12px)", color: "#999" }}>Last updated: March 2019</div>
+                </div>
+              </div>
+            </div>
+            {/* BEFORE label */}
+            <div style={{ position: "absolute", bottom: 16, left: 16, background: "rgba(0,0,0,0.7)", color: "#fff", fontSize: 11, fontWeight: 700, padding: "6px 14px", borderRadius: 8, letterSpacing: 1 }}>
+              BEFORE
+            </div>
+          </div>
+
+          {/* Slider handle */}
+          <div
+            className="absolute top-0 bottom-0 z-20"
+            style={{ left: `${sliderPos}%`, transform: "translateX(-50%)" }}
+          >
+            <div style={{ width: 3, height: "100%", background: "#fff", boxShadow: "0 0 12px rgba(0,0,0,0.5)" }} />
+            <div style={{
+              position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+              width: 44, height: 44, borderRadius: "50%", background: "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.3)", cursor: "col-resize"
+            }}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7 4L3 10L7 16" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13 4L17 10L13 16" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   return (
@@ -205,6 +361,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ─── Before & After ─── */}
+      <BeforeAfterSection />
 
       {/* ─── How It Works ─── */}
       <section className="py-24 bg-surface/50">
