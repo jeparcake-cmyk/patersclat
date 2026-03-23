@@ -510,7 +510,7 @@ export default function PusherMusicPage() {
         background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%)", pointerEvents: "none",
       }}>
         <span style={{ fontSize: 22, fontWeight: 900, color: "#fff" }}>PUSHER</span>
-        <div style={{ display: "flex", gap: 24, fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>
+        <div className="hidden sm:flex" style={{ gap: 24, fontSize: 12, letterSpacing: 2, textTransform: "uppercase" }}>
           <span style={{ color: "rgba(255,255,255,0.4)" }}>Sync Licensing</span>
           <span style={{ color: "rgba(255,255,255,0.4)" }}>Bespoke Composition</span>
           <span style={{ color: "rgba(255,255,255,0.4)" }}>Music Supervision</span>
