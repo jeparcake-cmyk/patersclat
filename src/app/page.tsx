@@ -47,7 +47,7 @@ const portfolio = [
     description: "Bold PT website with results showcase and booking system.",
   },
   {
-    title: "Pusher Music",
+    title: "Music Licensing",
     category: "Music Sync Agency",
     href: "/demo/pusher-music",
     color: "from-emerald-600/90 to-gray-900/90",
@@ -229,7 +229,7 @@ export default function Home() {
 
             <p className="mt-8 text-lg text-muted max-w-lg leading-relaxed animate-fade-in-up-delay-2">
               Beautiful, fast, and affordable websites tailored to small businesses.
-              No templates. No nonsense. Just results.
+              Just results.
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in-up-delay-3">
@@ -268,7 +268,7 @@ export default function Home() {
               </div>
 
               {/* Floating phone mockup */}
-              <div className="absolute -bottom-8 -left-8 w-36 rounded-2xl overflow-hidden shadow-xl border-2 border-border/50 bg-surface">
+              <div className="absolute -bottom-8 left-0 sm:-left-8 w-28 sm:w-36 rounded-2xl overflow-hidden shadow-xl border-2 border-border/50 bg-surface">
                 <div className="bg-surface-light px-2 py-1 flex items-center justify-center">
                   <div className="w-8 h-1 rounded-full bg-muted/30" />
                 </div>
@@ -280,7 +280,7 @@ export default function Home() {
               </div>
 
               {/* Floating stats card */}
-              <div className="absolute -top-4 -right-4 bg-surface rounded-xl p-4 shadow-xl border border-border/50">
+              <div className="absolute -top-4 right-0 sm:-right-4 bg-surface rounded-xl p-4 shadow-xl border border-border/50">
                 <div className="text-2xl font-bold gradient-text">+147%</div>
                 <div className="text-xs text-muted mt-1">More enquiries</div>
               </div>

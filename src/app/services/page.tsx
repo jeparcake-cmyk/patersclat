@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Services | slap.",
-  description: "Custom web design, development, SEO, e-commerce, hosting, and analytics for small businesses.",
+  description: "Custom web design, development, SEO, hosting, and analytics for small businesses.",
 };
 
 const services = [
@@ -11,7 +11,7 @@ const services = [
     icon: "🎨",
     title: "Custom Web Design",
     description:
-      "Every business is different, so every website should be too. We design from scratch - no templates, no themes pulled off a shelf. Your site will look and feel uniquely yours, built around your brand identity, your audience, and your goals.",
+      "Every business is different, so every website should be too. We design from scratch — your site will look and feel uniquely yours, built around your brand identity, your audience, and your goals.",
   },
   {
     icon: "⚡",
@@ -24,12 +24,6 @@ const services = [
     title: "SEO Optimisation",
     description:
       "What's the point of a great website if nobody can find it? We build every site with search engine best practices from the ground up - proper meta tags, fast load times, mobile optimisation, structured data, and content that Google loves.",
-  },
-  {
-    icon: "🛒",
-    title: "E-Commerce",
-    description:
-      "Ready to sell online? We build online stores that make buying simple and enjoyable. From product catalogues to secure checkout, inventory management to payment processing - we handle the technical side so you can focus on your products.",
   },
   {
     icon: "🛡️",

@@ -10,6 +10,7 @@ const plans = [
   {
     name: "Starter",
     price: "£499",
+    monthly: "+ £29/mo",
     description: "Perfect for new businesses that need a professional online presence.",
     features: [
       "Up to 5 pages",
@@ -17,12 +18,14 @@ const plans = [
       "Contact form",
       "Basic SEO setup",
       "1 month free support",
+      "Hosting & maintenance included",
     ],
     highlighted: false,
   },
   {
     name: "Growth",
     price: "£999",
+    monthly: "+ £49/mo",
     description: "For businesses ready to stand out and attract more customers.",
     features: [
       "Up to 10 pages",
@@ -32,21 +35,23 @@ const plans = [
       "Blog / news section",
       "Social media integration",
       "3 months free support",
+      "Hosting & maintenance included",
     ],
     highlighted: true,
   },
   {
     name: "Premium",
     price: "£1,999+",
-    description: "Full-featured websites with e-commerce and advanced functionality.",
+    monthly: "+ £79/mo",
+    description: "Full-featured websites with advanced functionality.",
     features: [
       "Unlimited pages",
-      "E-commerce integration",
       "Advanced SEO strategy",
       "Custom functionality",
       "Online booking / payments",
       "Priority support",
       "6 months free support",
+      "Hosting & maintenance included",
     ],
     highlighted: false,
   },
@@ -66,8 +71,8 @@ const faqs = [
     a: "We can set up hosting for you or work with your existing provider. Domain registration is separate but we'll help you get one sorted.",
   },
   {
-    q: "Can I update the website myself?",
-    a: "Absolutely. We can build in a content management system so you can easily update text, images, and blog posts yourself.",
+    q: "What does the monthly retainer cover?",
+    a: "The monthly retainer covers hosting, security updates, backups, and minor content changes. It keeps your site fast, safe, and running smoothly without you having to think about it.",
   },
   {
     q: "What if I need changes after launch?",
@@ -122,6 +127,7 @@ export default function PricingPage() {
                 <h2 className="text-2xl font-bold">{plan.name}</h2>
                 <div className="mt-4">
                   <span className="text-4xl font-bold gradient-text">{plan.price}</span>
+                  <span className="text-sm text-muted ml-2">{plan.monthly}</span>
                 </div>
                 <p className="mt-3 text-muted text-sm">{plan.description}</p>
                 <ul className="mt-8 space-y-3 flex-1">

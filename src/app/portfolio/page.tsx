@@ -36,10 +36,10 @@ const projects = [
     color: "from-gray-900 to-lime-900",
   },
   {
-    title: "Pusher Music",
+    title: "Music Licensing",
     category: "Music Sync & Licensing — Global",
     description:
-      "A sleek, dark-themed infinite scroll site for a music supervision company. Showcases 15 years of iconic film, TV, and brand placements alongside their roster of composers and artists.",
+      "A sleek, dark-themed interactive globe site for a music licensing company. Showcases placements across film, TV, and brands alongside their roster of composers and artists.",
     features: ["Infinite scroll feed", "Instagram-style grid", "Filter by type", "196 image cards", "Year markers"],
     href: "/demo/pusher-music",
     color: "from-black to-purple-950",
