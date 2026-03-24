@@ -10,7 +10,7 @@ const plans = [
   {
     name: "Starter",
     price: "£499",
-    monthly: "+ £29/mo",
+    monthly: "+ £100/yr hosting",
     description: "Perfect for new businesses that need a professional online presence.",
     features: [
       "Up to 5 pages",
@@ -25,7 +25,7 @@ const plans = [
   {
     name: "Growth",
     price: "£999",
-    monthly: "+ £49/mo",
+    monthly: "+ £100/yr hosting",
     description: "For businesses ready to stand out and attract more customers.",
     features: [
       "Up to 10 pages",
@@ -42,7 +42,7 @@ const plans = [
   {
     name: "Premium",
     price: "£1,999+",
-    monthly: "+ £79/mo",
+    monthly: "+ £100/yr hosting",
     description: "Full-featured websites with advanced functionality.",
     features: [
       "Unlimited pages",
@@ -71,8 +71,8 @@ const faqs = [
     a: "We can set up hosting for you or work with your existing provider. Domain registration is separate but we'll help you get one sorted.",
   },
   {
-    q: "What does the monthly retainer cover?",
-    a: "The monthly retainer covers hosting, security updates, backups, and minor content changes. It keeps your site fast, safe, and running smoothly without you having to think about it.",
+    q: "What does the yearly hosting fee cover?",
+    a: "The yearly hosting fee covers hosting, security updates, backups, and keeping your site running smoothly. It's just £100 per year — less than £2 a week to keep your business online.",
   },
   {
     q: "What if I need changes after launch?",
