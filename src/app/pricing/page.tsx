@@ -10,7 +10,7 @@ const plans = [
   {
     name: "Starter",
     price: "£499",
-    monthly: "+ hosting costs",
+    monthly: "+ hosting/domain costs",
     description: "Perfect for new businesses that need a professional online presence.",
     features: [
       "Up to 5 pages",
@@ -25,7 +25,7 @@ const plans = [
   {
     name: "Growth",
     price: "£999",
-    monthly: "+ hosting costs",
+    monthly: "+ hosting/domain costs",
     description: "For businesses ready to stand out and attract more customers.",
     features: [
       "Up to 10 pages",
@@ -42,7 +42,7 @@ const plans = [
   {
     name: "Premium",
     price: "£1,999+",
-    monthly: "+ hosting costs",
+    monthly: "+ hosting/domain costs",
     description: "Full-featured websites with advanced functionality.",
     features: [
       "Unlimited pages",
