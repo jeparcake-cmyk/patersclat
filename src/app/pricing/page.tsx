@@ -10,7 +10,7 @@ const plans = [
   {
     name: "Starter",
     price: "£499",
-    monthly: "+ £100/yr hosting",
+    monthly: "+ hosting costs",
     description: "Perfect for new businesses that need a professional online presence.",
     features: [
       "Up to 5 pages",
@@ -25,7 +25,7 @@ const plans = [
   {
     name: "Growth",
     price: "£999",
-    monthly: "+ £100/yr hosting",
+    monthly: "+ hosting costs",
     description: "For businesses ready to stand out and attract more customers.",
     features: [
       "Up to 10 pages",
@@ -42,7 +42,7 @@ const plans = [
   {
     name: "Premium",
     price: "£1,999+",
-    monthly: "+ £100/yr hosting",
+    monthly: "+ hosting costs",
     description: "Full-featured websites with advanced functionality.",
     features: [
       "Unlimited pages",
@@ -72,7 +72,7 @@ const faqs = [
   },
   {
     q: "What does the yearly hosting fee cover?",
-    a: "The yearly hosting fee covers hosting, security updates, backups, and keeping your site running smoothly. It's just £100 per year — less than £2 a week to keep your business online.",
+    a: "The yearly hosting fee covers hosting, security updates, backups, and keeping your site running smoothly. Hosting costs depend on your site's needs, but we'll give you a transparent quote.",
   },
   {
     q: "What if I need changes after launch?",
